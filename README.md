@@ -7,6 +7,9 @@
 ## Fonctionnalités principales
 
 - **Demande de déblocage intégrée** : Les équipes peuvent soumettre une demande de retrait de tentatives pour un challenge donné.
+- **Possibilité d’exclure** certains challenges du système de demande de déblocage.
+- **Mise en surbrillance** des challenges verrouillés.
+- **Possibilité de demander une tentative** supplémentaire pour un challenge.
 - **Système de malus configurable pour l'administration de l'évènement** :
   - **Malus fixe** : Retire un nombre précis de points lors du déblocage.
   - **Malus proportionnel** : Retire un pourcentage des points du challenge concerné.
@@ -52,7 +55,9 @@ Accédez au panneau d’administration **Plugins > Attempts-remover** pour :
 Voici une vidéo de démonstration du plugin : 
 
 
-https://github.com/user-attachments/assets/656cb398-fd3a-4897-8855-0e86607e8a21
+
+https://github.com/user-attachments/assets/90450a01-5411-4d25-ae22-b18eca2f2ff0
+
 
 
 ## Dépendances
