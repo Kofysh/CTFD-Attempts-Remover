@@ -1,4 +1,7 @@
 {
   "name": "Attempts-remover",
-  "route": "/plugins/ctfd-attempts-remover/admin"
+  "route": "/plugins/ctfd-attempts-remover/admin",
+  "title": "CTFD-Attempts-Remover",
+  "description": "Plugin permettant de solliciter un déblocage total lorsqu’un challenge est verrouillé ou qu’une tentative supplémentaire",
+  "author": "Hack'olyte"
 }

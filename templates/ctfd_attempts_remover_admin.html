@@ -1,105 +1,498 @@
 {% extends "admin/base.html" %}
 
 {% block content %}
-
-<div class="jumbotron">
-    <div class="container">
-        <h1>Attempts Remover</h1>
+<br>
+<!-- Container centré avec marges -->
+<div class="container" style="max-width: 1200px; margin: 0 auto; padding: 0 30px;">
+  <!-- Header avec gradient amélioré -->
+  <div class="row mb-5">
+    <div class="col-12">
+      <div class="card shadow-lg border-0" style="border-radius: 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);">
+        <div class="card-body py-5 px-5">
+          <div class="d-flex align-items-center justify-content-between">
+            <div class="d-flex align-items-center text-white">
+              <div class="bg-white bg-opacity-20 p-3 rounded-circle mr-4">
+                <i class="fas fa-shield-alt fa-2x text-white"></i>
+              </div>
+              <div>
+                <h1 class="mb-2 font-weight-bold display-4">Attempts Remover</h1>
+                <p class="mb-0 lead opacity-90">Gestion avancée des déblocages de challenges</p>
+              </div>
+            </div>
+            
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
+
+  <!-- Stats rapides avec design moderne -->
+  <div class="row mb-5">
+    <div class="col-lg-3 col-md-6 mb-4">
+      <div class="card border-0 h-100" style="border-radius: 15px; background: linear-gradient(45deg, #ff6b6b, #ff8787);">
+        <div class="card-body text-center text-white p-4">
+          <div class="bg-white bg-opacity-20 rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+            <i class="fas fa-lock fa-lg"></i>
+          </div>
+          <h3 class="font-weight-bold mb-1" id="blocked-count">-</h3>
+          <p class="mb-0 font-weight-medium">Équipes bloquées</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-3 col-md-6 mb-4">
+      <div class="card border-0 h-100" style="border-radius: 15px; background: linear-gradient(45deg, #ffa726, #ffcc02);">
+        <div class="card-body text-center text-white p-4">
+          <div class="bg-white bg-opacity-20 rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+            <i class="fas fa-envelope fa-lg"></i>
+          </div>
+          <h3 class="font-weight-bold mb-1" id="requests-count">-</h3>
+          <p class="mb-0 font-weight-medium">Demandes en attente</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-3 col-md-6 mb-4">
+      <div class="card border-0 h-100" style="border-radius: 15px; background: linear-gradient(45deg, #9c27b0, #ba68c8);">
+        <div class="card-body text-center text-white p-4">
+          <div class="bg-white bg-opacity-20 rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+            <i class="fas fa-ban fa-lg"></i>
+          </div>
+          <h3 class="font-weight-bold mb-1" id="excluded-count">-</h3>
+          <p class="mb-0 font-weight-medium">Challenges exclus</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-3 col-md-6 mb-4">
+      <div class="card border-0 h-100" style="border-radius: 15px; background: linear-gradient(45deg, #4caf50, #66bb6a);">
+        <div class="card-body text-center text-white p-4">
+          <div class="bg-white bg-opacity-20 rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+            <i class="fas fa-check-circle fa-lg"></i>
+          </div>
+          <h3 class="font-weight-bold mb-1" id="total-unblocks">-</h3>
+          <p class="mb-0 font-weight-medium">Déblocages total</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Navigation par onglets moderne -->
+  <div class="row mb-4">
+    <div class="col-12">
+      <div class="card border-0 shadow-sm" style="border-radius: 15px;">
+        <div class="card-body p-2">
+          <ul class="nav nav-pills nav-fill mb-0" id="adminTabs" role="tablist">
+            <li class="nav-item m-1">
+              <a class="nav-link active font-weight-bold py-3" id="config-tab" data-toggle="pill" href="#config" role="tab" style="border-radius: 12px;">
+                <i class="fas fa-cog mr-2"></i>Configuration
+              </a>
+            </li>
+            <li class="nav-item m-1">
+              <a class="nav-link font-weight-bold py-3" id="blocked-tab" data-toggle="pill" href="#blocked" role="tab" style="border-radius: 12px;">
+                <i class="fas fa-lock mr-2"></i>Équipes bloquées
+              </a>
+            </li>
+            <li class="nav-item m-1">
+              <a class="nav-link font-weight-bold py-3" id="exclusions-tab" data-toggle="pill" href="#exclusions" role="tab" style="border-radius: 12px;">
+                <i class="fas fa-ban mr-2"></i>Challenges exclus
+              </a>
+            </li>
+            <li class="nav-item m-1">
+              <a class="nav-link font-weight-bold py-3" id="logs-tab" data-toggle="pill" href="#logs" role="tab" style="border-radius: 12px;">
+                <i class="fas fa-history mr-2"></i>Historique
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tab-content">
+    <!-- Onglet Configuration -->
+     <div class="tab-pane fade show active" id="config">
+  <div class="row justify-content-center">
+    <div class="col-lg-10">
+      <div class="card border-0 shadow-lg" style="border-radius: 20px;">
+        <div class="card-header text-center py-4" style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border-radius: 20px 20px 0 0;">
+          <h4 class="mb-0 font-weight-bold">
+            <i class="fas fa-cog mr-3 text-primary"></i>Configuration du malus
+          </h4>
+        </div>
+        <div class="card-body p-5">
+          <div id="mode-box" class="alert alert-info mb-4" style="border-radius: 15px;">
+            <div class="d-flex align-items-center justify-content-center">
+              <div class="spinner-border spinner-border-sm mr-3" role="status"></div>
+              <span class="font-weight-medium">Chargement de la configuration...</span>
+            </div>
+          </div>
+         
+          <form id="remover-form">
+            <div class="row">
+              <div class="col-md-4 mb-4">
+                <label for="mode" class="font-weight-bold mb-2">Mode de malus</label>
+                <select id="mode" class="form-control form-control-lg" style="border-radius: 12px;">
+                  <option value="fixed">Coût fixe</option>
+                  <option value="percent">Pourcentage</option>
+                </select>
+              </div>
+             
+              <div class="col-md-4 mb-4">
+                <label for="fixed_cost" class="font-weight-bold mb-2">Coût fixe (points)</label>
+                <input type="number" id="fixed_cost" class="form-control form-control-lg" value="100" min="0" style="border-radius: 12px;">
+              </div>
+             
+              <div class="col-md-4 mb-4">
+                <label for="percent_cost" class="font-weight-bold mb-2">Pourcentage du challenge</label>
+                <div class="input-group">
+                  <input type="number" id="percent_cost" class="form-control form-control-lg" value="10" min="0" max="100" style="border-radius: 12px 0 0 12px;">
+                  <div class="input-group-append">
+                    <span class="input-group-text font-weight-bold" style="border-radius: 0 12px 12px 0;">%</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+           
+            <div class="text-center mt-4">
+              <button type="submit" class="btn btn-primary btn-lg px-5 py-3" style="border-radius: 15px; background: linear-gradient(45deg, #667eea, #764ba2);">
+                <i class="fas fa-save mr-2"></i>Enregistrer la configuration
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Nouvelle section pour tentative unique -->
+  <div class="row justify-content-center mt-4">
+    <div class="col-lg-10">
+      <div class="card border-0 shadow-lg" style="border-radius: 20px;">
+        <div class="card-header text-center py-4" style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border-radius: 20px 20px 0 0;">
+          <h4 class="mb-0 font-weight-bold">
+            <i class="fas fa-plus-circle mr-3 text-success"></i>Configuration tentative supplémentaire
+          </h4>
+        </div>
+        <div class="card-body p-5">
+          <div class="alert alert-warning mb-4" style="border-radius: 15px;">
+            <div class="d-flex align-items-center">
+              <i class="fas fa-info-circle mr-3"></i>
+              <span>Permet aux équipes de récupérer <strong>une seule tentative</strong> au lieu de toutes leurs tentatives</span>
+            </div>
+          </div>
+
+          <form id="single-attempt-form">
+            <div class="row">
+              <div class="col-md-3 mb-4">
+                <label for="single_attempt_enabled" class="font-weight-bold mb-2">Activer la fonctionnalité</label>
+                <select id="single_attempt_enabled" class="form-control form-control-lg" style="border-radius: 12px;">
+                  <option value="false">Désactivé</option>
+                  <option value="true">Activé</option>
+                </select>
+              </div>
+              
+              <div class="col-md-3 mb-4">
+                <label for="single_attempt_mode" class="font-weight-bold mb-2">Mode de coût</label>
+                <select id="single_attempt_mode" class="form-control form-control-lg" style="border-radius: 12px;">
+                  <option value="fixed">Coût fixe</option>
+                  <option value="percent">Pourcentage</option>
+                </select>
+              </div>
+              
+              <div class="col-md-3 mb-4">
+                <label for="single_attempt_fixed_cost" class="font-weight-bold mb-2">Coût fixe (points)</label>
+                <input type="number" id="single_attempt_fixed_cost" class="form-control form-control-lg" value="50" min="0" style="border-radius: 12px;">
+              </div>
+              
+              <div class="col-md-3 mb-4">
+                <label for="single_attempt_percent_cost" class="font-weight-bold mb-2">Pourcentage du challenge</label>
+                <div class="input-group">
+                  <input type="number" id="single_attempt_percent_cost" class="form-control form-control-lg" value="5" min="0" max="100" style="border-radius: 12px 0 0 12px;">
+                  <div class="input-group-append">
+                    <span class="input-group-text font-weight-bold" style="border-radius: 0 12px 12px 0;">%</span>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3 mb-4">
+                <label for="highlight_blocked_challenges" class="font-weight-bold mb-2">Surligner challenges bloqués</label>
+                <select id="highlight_blocked_challenges" class="form-control form-control-lg" style="border-radius: 12px;">
+                  <option value="false">Désactivé</option>
+                  <option value="true">Activé</option>
+                </select>
+              </div>
+            </div>
+            <div class="text-center mt-4">
+              <button type="submit" class="btn btn-success btn-lg px-5 py-3" style="border-radius: 15px; background: linear-gradient(45deg, #28a745, #20c997);">
+                <i class="fas fa-save mr-2"></i>Enregistrer cette configuration
+              </button>
+            </div>
+          </form>
+
+
+        </div>
+      </div>
+    </div>
+    
+  </div>
 </div>
-<div class="container mt-5">
+    
 
-  <style>
-  .refresh-button {
-      background-color: #4CAF50;
-      color: white;
-      padding: 12px 24px;
-      font-size: 16px;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-      transition: background-color 0.3s ease, transform 0.1s ease;
-    }
-
-    .refresh-button:hover {
-      background-color: #45a049;
-    }
-
-    .refresh-button:active {
-      transform: scale(0.97);
-    }
-</style>
-
-  <p class="mt-3">
-    Ce plugin permet aux administrateurs de réinitialiser les tentatives échouées d’une équipe sur un challenge spécifique.<br>
-    Les équipes peuvent elles-mêmes faire une demande de déblocage directement depuis le bouton disponible sur la page des challenges.<br>
-    Cela permet à l’administration d’éviter le processus fastidieux d’une intervention manuelle, tout en appliquant automatiquement un malus préconfiguré (voir ci-dessous). 
-  </p>
-
-  <hr class="my-5" />
-  <h4>🛠️ Configuration du malus :</h4>
-  <div id="mode-box" class="alert alert-info mt-4">Chargement de la configuration...</div>
-
-  <form id="remover-form" class="mt-4">
-    <div class="mb-3">
-      <label for="mode" class="form-label fw-bold">Mode de malus :</label>
-      <select id="mode" class="form-select">
-        <option value="fixed">Coût fixe</option>
-        <option value="percent">Pourcentage</option>
-      </select>
+    <!-- Onglet Équipes bloquées -->
+    <div class="tab-pane fade" id="blocked">
+      <div class="card border-0 shadow-lg" style="border-radius: 20px;">
+        <div class="card-header d-flex justify-content-between align-items-center py-4" style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border-radius: 20px 20px 0 0;">
+          <h4 class="mb-0 font-weight-bold">
+            <i class="fas fa-lock mr-3 text-danger"></i>Équipes actuellement bloquées
+          </h4>
+          <button class="btn btn-outline-primary btn-lg" onclick="loadBlockedTeams()" style="border-radius: 12px;">
+            <i class="fas fa-sync-alt mr-2"></i>Actualiser
+          </button>
+        </div>
+        <div class="card-body p-4">
+          <div class="row mb-4">
+            <div class="col-md-6">
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text" style="border-radius: 12px 0 0 12px;">
+                    <i class="fas fa-search"></i>
+                  </span>
+                </div>
+                <input type="text" id="team-filter" class="form-control form-control-lg" placeholder="Rechercher une équipe..." style="border-radius: 0 12px 12px 0;">
+              </div>
+            </div>
+          </div>
+          <div id="blocked-teams">
+            <div class="text-center py-5">
+              <div class="spinner-border text-primary mb-3" role="status" style="width: 3rem; height: 3rem;"></div>
+              <p class="text-muted font-weight-medium">Chargement en cours...</p>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <div class="mb-3">
-      <label for="fixed_cost" class="form-label">Coût fixe (pts à retirer)</label>
-      <input type="number" id="fixed_cost" class="form-control" value="100" />
+    <!-- Onglet Challenges exclus -->
+    <div class="tab-pane fade" id="exclusions">
+      <div class="row">
+        <!-- Gestion des exclusions -->
+        <div class="col-lg-6 mb-4">
+          <div class="card border-0 shadow-lg h-100" style="border-radius: 20px;">
+            <div class="card-header text-center py-4" style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border-radius: 20px 20px 0 0;">
+              <h5 class="mb-0 font-weight-bold">
+                <i class="fas fa-plus-circle mr-2 text-warning"></i>Exclure un challenge
+              </h5>
+            </div>
+            <div class="card-body p-4">
+              <div class="form-group mb-4">
+                <label for="challenge-select" class="font-weight-bold mb-3">Sélectionner un challenge</label>
+                <select id="challenge-select" class="form-control form-control-lg" style="border-radius: 12px;">
+                  <option value="">Chargement...</option>
+                </select>
+              </div>
+              <button id="exclude-btn" class="btn btn-warning btn-lg btn-block py-3" disabled style="border-radius: 15px;">
+                <i class="fas fa-ban mr-2"></i>Exclure ce challenge
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Liste des exclusions -->
+        <div class="col-lg-6 mb-4">
+          <div class="card border-0 shadow-lg h-100" style="border-radius: 20px;">
+            <div class="card-header d-flex justify-content-between align-items-center py-4" style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border-radius: 20px 20px 0 0;">
+              <h5 class="mb-0 font-weight-bold">
+                <i class="fas fa-list mr-2 text-secondary"></i>Challenges exclus
+              </h5>
+              <button class="btn btn-outline-primary" onclick="loadExcludedChallenges()" style="border-radius: 12px;">
+                <i class="fas fa-sync-alt mr-1"></i>Actualiser
+              </button>
+            </div>
+            <div class="card-body p-4">
+              <div id="excluded-challenges" class="scrollable-list">
+                <div class="text-center py-4">
+                  <div class="spinner-border spinner-border-sm text-primary mb-2" role="status"></div>
+                  <p class="text-muted mb-0">Chargement...</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <div class="mb-3">
-      <label for="percent_cost" class="form-label">Coût en % (pts du challenge)</label>
-      <input type="number" id="percent_cost" class="form-control" value="10" />
+    <!-- Onglet Historique -->
+    <div class="tab-pane fade" id="logs">
+      <div class="card border-0 shadow-lg" style="border-radius: 20px;">
+        <div class="card-header d-flex justify-content-between align-items-center py-4" style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border-radius: 20px 20px 0 0;">
+          <h4 class="mb-0 font-weight-bold">
+            <i class="fas fa-history mr-3 text-info"></i>Historique des déblocages
+          </h4>
+          <button class="btn btn-outline-primary btn-lg" onclick="loadUnblockLogs()" style="border-radius: 12px;">
+            <i class="fas fa-sync-alt mr-2"></i>Actualiser
+          </button>
+        </div>
+        <div class="card-body p-4">
+          <div id="unblock-logs">
+            <div class="text-center py-5">
+              <div class="spinner-border text-primary mb-3" role="status" style="width: 3rem; height: 3rem;"></div>
+              <p class="text-muted font-weight-medium">Chargement des logs...</p>
+            </div>
+          </div>
+          <nav>
+            <ul id="pagination" class="pagination justify-content-center mt-4"></ul>
+          </nav>
+        </div>
+      </div>
     </div>
-
-    <button type="submit" class="btn btn-primary">Enregistrer cette configuration</button>
-  </form>
-
-  <hr class="my-5" />
-  <h4>🚫 Équipes actuellement bloquées :</h4>
-  <button class="refresh-button" onclick="location.reload();">
-    Rafraîchir le tableau
-  </button><br><br>
-  <div class="mb-3">
-    <input type="text" id="team-filter" class="form-control" placeholder="🔍 Rechercher une équipe...">
   </div>
-
-  <div id="blocked-teams" class="table-responsive">
-    <p>Chargement en cours...</p>
-  </div>
-
-  <hr class="my-5" />
-  <h4>📜 Historique des déblocages :</h4>
-  <div id="unblock-logs" class="table-responsive">
-    <p>Chargement des logs...</p>
-  </div>
-  <nav>
-    <ul id="pagination" class="pagination justify-content-center"></ul>
-  </nav>
 </div>
 <br>
+<!-- Footer moderne -->
 <footer>
   <p style="text-align: center;">
     <a href="https://hackolyte.fr/">
       <img src="https://hackolyte.fr/wp-content/uploads/2024/09/cropped-cropped-logo.png" alt="Hack'olyte logo" style="height: 30px; vertical-align: middle; margin-right: 5px;">
     </a>
-    Plugin développé par l'association <a href="https://hackolyte.fr/">Hack'olyte</a> - v1.1
+    Plugin développé par l'association <a href="https://hackolyte.fr/">Hack'olyte</a> - v2
   </p>
 </footer>
 
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-  const modeBox = document.getElementById("mode-box");
-  let config = {};
+<style>
+.bg-opacity-10 { background-color: rgba(255, 255, 255, 0.1) !important; }
+.bg-opacity-20 { background-color: rgba(255, 255, 255, 0.2) !important; }
 
+/* Conteneur scrollable pour les challenges exclus */
+.scrollable-list {
+  max-height: 200px;
+  overflow-y: auto;
+  padding-right: 10px;
+}
+
+/* Personnaliser la scrollbar */
+.scrollable-list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.scrollable-list::-webkit-scrollbar-track {
+  background: var(--custom-bg-secondary, #f1f1f1);
+  border-radius: 10px;
+}
+
+.scrollable-list::-webkit-scrollbar-thumb {
+  background: var(--custom-text-secondary, #888);
+  border-radius: 10px;
+}
+
+.scrollable-list::-webkit-scrollbar-thumb:hover {
+  background: var(--custom-text-primary, #555);
+}
+
+.scrollable-list {
+  scrollbar-width: thin;
+  scrollbar-color: var(--custom-text-secondary, #888) var(--custom-bg-secondary, #f1f1f1);
+}
+
+.nav-pills .nav-link {
+  transition: all 0.2s ease;
+  border: 2px solid transparent;
+}
+
+.nav-pills .nav-link:hover {
+  background-color: rgba(102, 126, 234, 0.1);
+  border-color: rgba(102, 126, 234, 0.3);
+}
+
+.nav-pills .nav-link.active {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+  color: white !important;
+  box-shadow: 0 3px 10px rgba(102, 126, 234, 0.3);
+}
+
+.table th {
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  border: none;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  letter-spacing: 0.5px;
+  padding: 1rem;
+}
+
+.table td {
+  padding: 1rem;
+  vertical-align: middle;
+}
+
+.btn {
+  font-weight: 500;
+  transition: all 0.2s ease;
+  border: none;
+}
+
+.btn:hover {
+  box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+}
+
+.form-control {
+  border: 2px solid #e9ecef;
+  transition: all 0.2s ease;
+}
+
+.form-control:focus {
+  border-color: #667eea;
+  box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+}
+
+.alert {
+  border: none;
+}
+
+.spinner-border {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.badge {
+  font-size: 0.75rem;
+  padding: 0.5rem 0.75rem;
+}
+
+.table-hover tbody tr:hover {
+  background-color: rgba(102, 126, 234, 0.05);
+  transition: all 0.2s ease;
+}
+</style>
+
+<script>
+// Variables globales
+let config = {};
+
+// Fonction sécurisée pour échapper le HTML et prévenir les XSS
+function escapeHtml(text) {
+  const div = document.createElement('div');
+  div.textContent = text;
+  return div.innerHTML;
+}
+
+// Fonction sécurisée pour créer des éléments avec du texte
+function createTextElement(tagName, text, className = '') {
+  const element = document.createElement(tagName);
+  element.textContent = text;
+  if (className) element.className = className;
+  return element;
+}
+
+// Toast helper function sécurisée
+function showToast(message, type = 'success') {
+  const icon = type === 'success' ? '✅' : '❌';
+  alert(icon + ' ' + escapeHtml(message));
+}
+
+// Charger la configuration
+function loadConfig() {
   CTFd.fetch("/api/v1/attempts_remover/config", {
     method: "GET",
     credentials: "same-origin",
@@ -107,24 +500,66 @@ document.addEventListener("DOMContentLoaded", function () {
   .then(res => res.json())
   .then(data => {
     config = data;
+    // Configs existantes
     document.getElementById("mode").value = data.mode;
     document.getElementById("fixed_cost").value = data.fixed_cost;
     document.getElementById("percent_cost").value = data.percent_cost;
 
-    modeBox.textContent = "";
-    const strong = document.createElement("strong");
-    strong.textContent = data.mode === "fixed"
-      ? `Configuration actuelle - mode fixe : chaque déblocage coûte ${data.fixed_cost} points.`
-      : `Configuration actuelle - mode pourcentage : chaque déblocage coûte ${data.percent_cost}% des points du challenge.`;
-    modeBox.appendChild(strong);
-  });
+    // Nouvelles configs
+    document.getElementById("single_attempt_enabled").value = data.single_attempt_enabled.toString();
+    document.getElementById("single_attempt_mode").value = data.single_attempt_mode;
+    document.getElementById("single_attempt_fixed_cost").value = data.single_attempt_fixed_cost;
+    document.getElementById("single_attempt_percent_cost").value = data.single_attempt_percent_cost;
+    document.getElementById("highlight_blocked_challenges").value = data.highlight_blocked_challenges.toString();
 
-  document.getElementById("remover-form").addEventListener("submit", function (e) {
+    // Mise à jour de l'affichage existant
+    const modeBox = document.getElementById("mode-box");
+    modeBox.className = "alert alert-success mb-4";
+    modeBox.innerHTML = '';
+    
+    const flexDiv = document.createElement('div');
+    flexDiv.className = 'd-flex align-items-center justify-content-center';
+    
+    const icon = document.createElement('i');
+    icon.className = 'fas fa-check-circle mr-3';
+    
+    const strong = createTextElement('strong', 'Configuration actuelle : ');
+    
+    const span = createTextElement('span', 
+      data.mode === "fixed" 
+        ? `Mode fixe - ${data.fixed_cost} points par déblocage`
+        : `Mode pourcentage - ${data.percent_cost}% des points du challenge`,
+      'ml-2'
+    );
+    
+    flexDiv.appendChild(icon);
+    flexDiv.appendChild(strong);
+    flexDiv.appendChild(span);
+    modeBox.appendChild(flexDiv);
+  })
+  .catch(e => {
+    console.error("Erreur lors du chargement de la config:", e);
+    showToast("Erreur lors du chargement de la configuration", 'danger');
+  });
+}
+
+
+// Setup du formulaire tentative unique
+const singleAttemptForm = document.getElementById("single-attempt-form");
+if (singleAttemptForm) {
+  singleAttemptForm.addEventListener("submit", function (e) {
     e.preventDefault();
     const payload = {
       mode: document.getElementById("mode").value,
-      fixed_cost: parseInt(document.getElementById("fixed_cost").value),
-      percent_cost: parseInt(document.getElementById("percent_cost").value)
+      fixed_cost: parseInt(document.getElementById("fixed_cost").value) || 0,
+      percent_cost: parseInt(document.getElementById("percent_cost").value) || 0,
+      
+      // Nouvelles configs
+      single_attempt_enabled: document.getElementById("single_attempt_enabled").value === "true",
+      single_attempt_mode: document.getElementById("single_attempt_mode").value,
+      single_attempt_fixed_cost: parseInt(document.getElementById("single_attempt_fixed_cost").value) || 0,
+      single_attempt_percent_cost: parseInt(document.getElementById("single_attempt_percent_cost").value) || 0,
+      highlight_blocked_challenges: document.getElementById("highlight_blocked_challenges").value === "true"
     };
 
     CTFd.fetch("/api/v1/attempts_remover/config", {
@@ -136,220 +571,760 @@ document.addEventListener("DOMContentLoaded", function () {
     .then(res => res.json())
     .then(res => {
       if (res.success) {
-        alert("✅ Configuration enregistrée !");
-        location.reload();
+        showToast("Configuration des tentatives uniques enregistrée !");
+        loadConfig();
       } else {
-        alert("❌ Erreur : " + (res.error || "inconnue"));
+        showToast("Erreur : " + (res.error || "inconnue"), 'danger');
       }
+    })
+    .catch(e => {
+      console.error("Erreur lors de l'enregistrement:", e);
+      showToast("Erreur lors de l'enregistrement", 'danger');
     });
   });
+}
 
-  function loadBlockedTeams() {
-    CTFd.fetch("/api/v1/attempts_remover/admin_blocked", {
-      method: "GET",
-      credentials: "same-origin"
+// Charger tous les challenges pour la sélection
+function loadAllChallenges() {
+  CTFd.fetch("/api/v1/attempts_remover/all_challenges", {
+    method: "GET",
+    credentials: "same-origin"
+  })
+  .then(res => res.json())
+  .then(challenges => {
+    const select = document.getElementById("challenge-select");
+    select.innerHTML = '';
+    
+    const defaultOption = document.createElement("option");
+    defaultOption.value = "";
+    defaultOption.textContent = "Sélectionner un challenge...";
+    select.appendChild(defaultOption);
+    
+    challenges.filter(c => !c.excluded).forEach(challenge => {
+      const option = document.createElement("option");
+      option.value = challenge.id;
+      option.textContent = `${escapeHtml(challenge.name)} (${challenge.value} pts) - ${escapeHtml(challenge.category)}`;
+      select.appendChild(option);
+    });
+  })
+  .catch(e => {
+    console.error("Erreur lors du chargement des challenges:", e);
+    showToast("Erreur lors du chargement des challenges", 'danger');
+  });
+}
+
+// Charger les challenges exclus
+function loadExcludedChallenges() {
+  CTFd.fetch("/api/v1/attempts_remover/excluded_challenges", {
+    method: "GET",
+    credentials: "same-origin"
+  })
+  .then(res => res.json())
+  .then(excluded => {
+    const container = document.getElementById("excluded-challenges");
+    container.innerHTML = '';
+    
+    if (!excluded || excluded.length === 0) {
+      const emptyDiv = document.createElement('div');
+      emptyDiv.className = 'text-center py-4 text-muted';
+      
+      const icon = document.createElement('i');
+      icon.className = 'fas fa-info-circle fa-2x mb-3';
+      
+      const text = createTextElement('p', 'Aucun challenge exclu', 'mb-0 font-weight-medium');
+      
+      emptyDiv.appendChild(icon);
+      emptyDiv.appendChild(text);
+      container.appendChild(emptyDiv);
+      return;
+    }
+
+    excluded.forEach(item => {
+      const card = document.createElement('div');
+      card.className = 'card border-left-warning mb-3';
+      card.style.borderRadius = '12px';
+      
+      const cardBody = document.createElement('div');
+      cardBody.className = 'card-body py-3';
+      
+      const flexDiv = document.createElement('div');
+      flexDiv.className = 'd-flex justify-content-between align-items-center';
+      
+      const infoDiv = document.createElement('div');
+      const title = createTextElement('h6', escapeHtml(item.challenge_name), 'mb-1 font-weight-bold');
+      const subtitle = createTextElement('small', `${item.challenge_value} pts - Exclu par ${escapeHtml(item.excluded_by)}`, 'text-muted');
+      
+      infoDiv.appendChild(title);
+      infoDiv.appendChild(subtitle);
+      
+      const btn = document.createElement('button');
+      btn.className = 'btn btn-outline-success btn-sm';
+      btn.style.borderRadius = '8px';
+      btn.onclick = function() { includeChallenge(item.challenge_id, item.challenge_name); };
+      
+      const btnIcon = document.createElement('i');
+      btnIcon.className = 'fas fa-check mr-1';
+      btn.appendChild(btnIcon);
+      btn.appendChild(document.createTextNode('Réintégrer'));
+      
+      flexDiv.appendChild(infoDiv);
+      flexDiv.appendChild(btn);
+      cardBody.appendChild(flexDiv);
+      card.appendChild(cardBody);
+      container.appendChild(card);
+    });
+  })
+  .catch(e => {
+    console.error("Erreur lors du chargement des exclusions:", e);
+    showToast("Erreur lors du chargement des exclusions", 'danger');
+  });
+}
+
+// Réintégrer un challenge
+function includeChallenge(challengeId, challengeName) {
+  const safeName = escapeHtml(challengeName);
+  if (confirm(`Réintégrer "${safeName}" dans les demandes de déblocage ?`)) {
+    CTFd.fetch("/api/v1/attempts_remover/include_challenge", {
+      method: "POST",
+      credentials: "same-origin",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ challenge_id: challengeId })
     })
     .then(res => res.json())
-    .then(data => {
-      const container = document.getElementById("blocked-teams");
-      container.textContent = "";
+    .then(result => {
+      if (result.success) {
+        showToast(result.message);
+        loadAllChallenges();
+        loadExcludedChallenges();
+        updateStats();
+      } else {
+        showToast("Erreur : " + (result.error || "inconnue"), 'danger');
+      }
+    })
+    .catch(e => {
+      console.error("Erreur lors de la réintégration:", e);
+      showToast("Erreur lors de la réintégration", 'danger');
+    });
+  }
+}
 
-      if (!data || data.length === 0) {
-        container.textContent = "✅ Aucun blocage détecté - aucune demande en cours.";
-        return;
+// Mettre à jour les statistiques
+function updateStats() {
+  Promise.all([
+    CTFd.fetch("/api/v1/attempts_remover/admin_blocked", { credentials: "same-origin" }).then(r => r.json()),
+    CTFd.fetch("/api/v1/attempts_remover/excluded_challenges", { credentials: "same-origin" }).then(r => r.json()),
+    CTFd.fetch("/api/v1/attempts_remover/unblock_logs", { credentials: "same-origin" }).then(r => r.json())
+  ]).then(([blocked, excluded, logs]) => {
+    document.getElementById('blocked-count').textContent = blocked.length;
+    
+    // Compter TOUTES les demandes (déblocage complet + tentatives uniques)
+    const totalRequests = blocked.filter(b => b.requested || b.single_attempt_requested).length;
+    document.getElementById('requests-count').textContent = totalRequests;
+    
+    document.getElementById('excluded-count').textContent = excluded.length;
+    document.getElementById('total-unblocks').textContent = logs.length;
+  }).catch(e => {
+    console.error("Erreur lors du chargement des stats:", e);
+  });
+}
+
+// Charger les équipes bloquées
+function loadBlockedTeams() {
+  CTFd.fetch("/api/v1/attempts_remover/admin_blocked", {
+    method: "GET",
+    credentials: "same-origin"
+  })
+  .then(res => res.json())
+  .then(data => {
+    const container = document.getElementById("blocked-teams");
+    container.innerHTML = '';
+    
+    if (!data || data.length === 0) {
+      const emptyDiv = document.createElement('div');
+      emptyDiv.className = 'text-center py-5';
+      
+      const icon = document.createElement('i');
+      icon.className = 'fas fa-check-circle text-success mb-3';
+      icon.style.fontSize = '3rem';
+      
+      const title = createTextElement('h4', 'Aucun blocage détecté', 'text-success font-weight-bold');
+      const subtitle = createTextElement('p', 'Toutes les équipes peuvent accéder à leurs challenges !', 'text-muted');
+      
+      emptyDiv.appendChild(icon);
+      emptyDiv.appendChild(title);
+      emptyDiv.appendChild(subtitle);
+      container.appendChild(emptyDiv);
+      return;
+    }
+
+    // Créer le tableau de manière sécurisée
+    const tableWrapper = document.createElement('div');
+    tableWrapper.className = 'table-responsive';
+    
+    const table = document.createElement("table");
+    table.className = "table table-hover";
+    table.style.borderRadius = '15px';
+    table.style.overflow = 'hidden';
+
+    const thead = document.createElement("thead");
+    const headerRow = document.createElement("tr");
+    
+    const headers = ["Équipe", "Challenge", "Points", "Tentatives", "Perte", "Date blocage", "Demandes", "Actions"];
+    headers.forEach(text => {
+      const th = createTextElement("th", text);
+      headerRow.appendChild(th);
+    });
+    thead.appendChild(headerRow);
+    table.appendChild(thead);
+
+    const tbody = document.createElement("tbody");
+
+    data.forEach(item => {
+      const challengePts = item.value || 0;
+      const cost = config.mode === "fixed"
+        ? config.fixed_cost
+        : Math.max(1, Math.ceil((challengePts * config.percent_cost) / 100));
+
+      const row = document.createElement("tr");
+      if (item.requested) row.className = "table-warning";
+
+      // Équipe
+      const tdTeam = document.createElement("td");
+      tdTeam.className = "team-name";
+      const teamDiv = document.createElement('div');
+      teamDiv.className = 'd-flex align-items-center';
+      const teamIcon = document.createElement('i');
+      teamIcon.className = 'fas fa-users text-primary mr-2';
+      const teamText = createTextElement('span', escapeHtml(item.team_name));
+      teamDiv.appendChild(teamIcon);
+      teamDiv.appendChild(teamText);
+      tdTeam.appendChild(teamDiv);
+      row.appendChild(tdTeam);
+
+      // Challenge
+      const tdChallenge = document.createElement("td");
+      const challengeDiv = document.createElement('div');
+
+      const challengeBadge = createTextElement('span', escapeHtml(item.challenge_name), 'badge badge-secondary');
+      challengeBadge.style.borderRadius = '8px';
+      challengeDiv.appendChild(challengeBadge);
+
+      // Ajouter un badge si exclu
+      if (item.is_excluded) {
+        const excludedBadge = createTextElement('span', 'EXCLU', 'badge badge-warning ml-1');
+        excludedBadge.style.borderRadius = '8px';
+        excludedBadge.style.fontSize = '0.6rem';
+        excludedBadge.title = 'Challenge exclu du déblocage utilisateur';
+        challengeDiv.appendChild(excludedBadge);
       }
 
+      tdChallenge.appendChild(challengeDiv);
+      row.appendChild(tdChallenge);
+
+      // Points
+      const tdPoints = createTextElement("td", challengePts.toString());
+      tdPoints.className = 'font-weight-bold';
+      row.appendChild(tdPoints);
+
+      // Tentatives
+      const tdAttempts = document.createElement("td");
+      const attemptsBadge = createTextElement('span', `${item.fail_count} / ${item.max_attempts}`, 'badge badge-danger');
+      attemptsBadge.style.borderRadius = '8px';
+      tdAttempts.appendChild(attemptsBadge);
+      row.appendChild(tdAttempts);
+
+      // Perte
+      const tdCost = createTextElement("td", `-${cost} pts`, 'text-danger font-weight-bold');
+      row.appendChild(tdCost);
+
+      // Date de blocage
+      const tdDate = document.createElement("td");
+      if (item.blocked_date) {
+        const dateDiv = document.createElement('div');
+        dateDiv.className = 'small text-muted';
+        const calIcon = document.createElement('i');
+        calIcon.className = 'fas fa-calendar-alt mr-1';
+        const date = new Date(item.blocked_date);
+        date.setHours(date.getHours() + 2); // Ajouter 2 heures artificiellement
+        const dateText = createTextElement('span', date.toLocaleString('fr-FR'));
+        dateDiv.appendChild(calIcon);
+        dateDiv.appendChild(dateText);
+        tdDate.appendChild(dateDiv);
+      } else {
+        const unknownText = createTextElement('span', 'Inconnue', 'text-muted small');
+        tdDate.appendChild(unknownText);
+      }
+      row.appendChild(tdDate);
+
+      // Demande
+      const tdRequest = document.createElement("td");
+      const requestsDiv = document.createElement('div');
+      requestsDiv.className = 'd-flex flex-column gap-1';
+
+      if (item.requested) {
+        const fullBadge = document.createElement('span');
+        fullBadge.className = 'badge badge-warning mb-1';
+        fullBadge.style.borderRadius = '8px';
+        fullBadge.style.fontSize = '0.7rem';
+        const clockIcon = document.createElement('i');
+        clockIcon.className = 'fas fa-unlock mr-1';
+        fullBadge.appendChild(clockIcon);
+        fullBadge.appendChild(document.createTextNode('Déblocage complet'));
+        requestsDiv.appendChild(fullBadge);
+      }
+
+      if (item.single_attempt_requested) {
+        const singleBadge = document.createElement('span');
+        singleBadge.className = 'badge badge-info mb-1';
+        singleBadge.style.borderRadius = '8px';
+        singleBadge.style.fontSize = '0.7rem';
+        const plusIcon = document.createElement('i');
+        plusIcon.className = 'fas fa-plus mr-1';
+        singleBadge.appendChild(plusIcon);
+        singleBadge.appendChild(document.createTextNode('Tentative unique'));
+        requestsDiv.appendChild(singleBadge);
+      }
+
+      if (!item.requested && !item.single_attempt_requested) {
+        const noBadge = createTextElement('span', 'Aucune', 'badge badge-secondary');
+        noBadge.style.borderRadius = '8px';
+        noBadge.style.fontSize = '0.7rem';
+        requestsDiv.appendChild(noBadge);
+      }
+
+      tdRequest.appendChild(requestsDiv);
+      row.appendChild(tdRequest);
+
+      // Actions (les deux boutons)
+      const tdAction = document.createElement("td");
+      const actionsDiv = document.createElement('div');
+      actionsDiv.className = 'd-flex flex-column gap-1';
+
+      // Bouton déblocage complet
+      const fullBtn = document.createElement("button");
+      fullBtn.className = "btn btn-danger btn-sm mb-1";
+      fullBtn.style.borderRadius = '8px';
+      fullBtn.style.fontSize = '0.75rem';
+      fullBtn.onclick = function() {
+        unblockTeam(item.team_id, item.challenge_id, item.team_name, item.challenge_name);
+      };
+      const fullIcon = document.createElement('i');
+      fullIcon.className = 'fas fa-unlock mr-1';
+      fullBtn.appendChild(fullIcon);
+      fullBtn.appendChild(document.createTextNode('Déblocage complet'));
+      actionsDiv.appendChild(fullBtn);
+
+      // Bouton tentative unique (seulement si la fonctionnalité est activée)
+      if (config.single_attempt_enabled) {
+        const singleBtn = document.createElement("button");
+        singleBtn.className = "btn btn-success btn-sm";
+        singleBtn.style.borderRadius = '8px';
+        singleBtn.style.fontSize = '0.75rem';
+        singleBtn.onclick = function() {
+          grantSingleAttempt(item.team_id, item.challenge_id, item.team_name, item.challenge_name);
+        };
+        const singleIcon = document.createElement('i');
+        singleIcon.className = 'fas fa-plus mr-1';
+        singleBtn.appendChild(singleIcon);
+        singleBtn.appendChild(document.createTextNode('1 tentative'));
+        actionsDiv.appendChild(singleBtn);
+      }
+
+      tdAction.appendChild(actionsDiv);
+      row.appendChild(tdAction);
+
+      tbody.appendChild(row);
+    });
+
+    table.appendChild(tbody);
+    tableWrapper.appendChild(table);
+    container.appendChild(tableWrapper);
+
+    // Filtre de recherche sécurisé
+    const filterInput = document.getElementById("team-filter");
+    const newFilterInput = filterInput.cloneNode(true);
+    filterInput.parentNode.replaceChild(newFilterInput, filterInput);
+    
+    newFilterInput.addEventListener("input", function() {
+      const query = this.value.toLowerCase();
+      tbody.querySelectorAll("tr").forEach(row => {
+        const team = row.querySelector(".team-name").textContent.toLowerCase();
+        row.style.display = team.includes(query) ? "" : "none";
+      });
+    });
+
+    updateStats();
+  })
+  .catch(e => {
+    console.error("Erreur lors du chargement des équipes bloquées:", e);
+    showToast("Erreur lors du chargement des équipes bloquées", 'danger');
+  });
+}
+
+// Débloquer une équipe de manière sécurisée
+function unblockTeam(teamId, challengeId, teamName, challengeName) {
+  const safeTeamName = escapeHtml(teamName);
+  const safeChallengeName = escapeHtml(challengeName);
+  
+  if (confirm(`Confirmer le déblocage de "${safeTeamName}" pour "${safeChallengeName}" ?`)) {
+    CTFd.fetch("/api/v1/attempts_remover/admin_unblock", {
+      method: "POST",
+      credentials: "same-origin",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        team_id: teamId,
+        challenge_id: challengeId
+      })
+    })
+    .then(res => res.json())
+    .then(result => {
+      if (result.success) {
+        showToast(`${safeTeamName} débloquée avec succès (-${result.cost} pts)`);
+        loadBlockedTeams();
+        loadUnblockLogs();
+      } else {
+        showToast("Erreur : " + (result.error || "inconnue"), 'danger');
+      }
+    })
+    .catch(e => {
+      console.error("Erreur lors du déblocage:", e);
+      showToast("Erreur lors du déblocage", 'danger');
+    });
+  }
+}
+
+// Accorder une tentative supplémentaire
+function grantSingleAttempt(teamId, challengeId, teamName, challengeName) {
+  const safeTeamName = escapeHtml(teamName);
+  const safeChallengeName = escapeHtml(challengeName);
+  
+  if (confirm(`Accorder une tentative supplémentaire à "${safeTeamName}" pour "${safeChallengeName}" ?`)) {
+    CTFd.fetch("/api/v1/attempts_remover/admin_grant_single_attempt", {
+      method: "POST",
+      credentials: "same-origin",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        team_id: teamId,
+        challenge_id: challengeId
+      })
+    })
+    .then(res => res.json())
+    .then(result => {
+      if (result.success) {
+        showToast(`${safeTeamName} a reçu une tentative supplémentaire (-${result.cost} pts)`);
+        loadBlockedTeams();
+        loadUnblockLogs();
+      } else {
+        showToast("Erreur : " + (result.error || "inconnue"), 'danger');
+      }
+    })
+    .catch(e => {
+      console.error("Erreur lors de l'attribution:", e);
+      showToast("Erreur lors de l'attribution", 'danger');
+    });
+  }
+}
+
+// Charger les logs de déblocage
+function loadUnblockLogs() {
+  CTFd.fetch("/api/v1/attempts_remover/unblock_logs", {
+    method: "GET",
+    credentials: "same-origin"
+  })
+  .then(res => res.json())
+  .then(logs => {
+    const container = document.getElementById("unblock-logs");
+    const pagination = document.getElementById("pagination");
+    
+    container.innerHTML = '';
+    pagination.innerHTML = "";
+
+    if (!logs || logs.length === 0) {
+      const emptyDiv = document.createElement('div');
+      emptyDiv.className = 'text-center py-5';
+      
+      const icon = document.createElement('i');
+      icon.className = 'fas fa-info-circle text-muted mb-3';
+      icon.style.fontSize = '2rem';
+      
+      const text = createTextElement('p', 'Aucun déblocage récent enregistré', 'text-muted font-weight-medium');
+      
+      emptyDiv.appendChild(icon);
+      emptyDiv.appendChild(text);
+      container.appendChild(emptyDiv);
+      return;
+    }
+
+    const itemsPerPage = 10;
+    let currentPage = 1;
+    const totalPages = Math.ceil(logs.length / itemsPerPage);
+
+    function renderPage(page) {
+      const start = (page - 1) * itemsPerPage;
+      const end = start + itemsPerPage;
+      const currentLogs = logs.slice(start, end);
+
+      container.innerHTML = "";
+
+      const tableWrapper = document.createElement('div');
+      tableWrapper.className = 'table-responsive';
+      
       const table = document.createElement("table");
-      table.className = "table table-bordered table-striped text-center";
+      table.className = "table table-striped";
+      table.style.borderRadius = '15px';
+      table.style.overflow = 'hidden';
 
       const thead = document.createElement("thead");
-      thead.className = "table-dark";
       const headerRow = document.createElement("tr");
-      ["Équipe", "Challenge", "Points", "Tentatives", "Perte", "Demande ?", "Action"].forEach(text => {
-        const th = document.createElement("th");
-        th.textContent = text;
+      
+      const headers = ["Date", "Admin", "Équipe", "Challenge", "Type"];
+      headers.forEach(text => {
+        const th = createTextElement("th", text);
         headerRow.appendChild(th);
       });
       thead.appendChild(headerRow);
       table.appendChild(thead);
 
       const tbody = document.createElement("tbody");
+      
+      currentLogs.forEach(log => {
+        const tr = document.createElement("tr");
 
-      data.forEach(entry => {
-        const challengePts = entry.value || 0;
-        const cost = config.mode === "fixed"
-          ? config.fixed_cost
-          : Math.floor((challengePts * config.percent_cost) / 100);
+        // Date
+        const tdDate = document.createElement("td");
+        const dateDiv = document.createElement('div');
+        dateDiv.className = 'small text-muted';
+        const calIcon = document.createElement('i');
+        calIcon.className = 'fas fa-calendar-alt mr-1';
+        const date = new Date(log.timestamp);
+        date.setHours(date.getHours() + 2); // Ajouter 2 heures artificiellement
+        const dateText = createTextElement('span', date.toLocaleString('fr-FR'));
+        dateDiv.appendChild(calIcon);
+        dateDiv.appendChild(dateText);
+        tdDate.appendChild(dateDiv);
+        tr.appendChild(tdDate);
 
-        const row = document.createElement("tr");
+        // Admin
+        const tdAdmin = document.createElement("td");
+        const adminBadge = document.createElement('span');
+        adminBadge.className = 'badge badge-info';
+        adminBadge.style.borderRadius = '8px';
+        const shieldIcon = document.createElement('i');
+        shieldIcon.className = 'fas fa-user-shield mr-1';
+        adminBadge.appendChild(shieldIcon);
+        adminBadge.appendChild(createTextElement('span', escapeHtml(log.admin_name)));
+        tdAdmin.appendChild(adminBadge);
+        tr.appendChild(tdAdmin);
 
+        // Équipe
         const tdTeam = document.createElement("td");
-        tdTeam.textContent = entry.team_name;
-        tdTeam.className = "team-name";
-        row.appendChild(tdTeam);
+        const teamBadge = document.createElement('span');
+        teamBadge.className = 'badge badge-primary';
+        teamBadge.style.borderRadius = '8px';
+        const usersIcon = document.createElement('i');
+        usersIcon.className = 'fas fa-users mr-1';
+        teamBadge.appendChild(usersIcon);
+        teamBadge.appendChild(createTextElement('span', escapeHtml(log.team_name)));
+        tdTeam.appendChild(teamBadge);
+        tr.appendChild(tdTeam);
 
+        // Challenge
         const tdChallenge = document.createElement("td");
-        tdChallenge.textContent = entry.challenge_name;
-        row.appendChild(tdChallenge);
+        const challengeBadge = createTextElement('span', escapeHtml(log.challenge_name), 'badge badge-secondary');
+        challengeBadge.style.borderRadius = '8px';
+        tdChallenge.appendChild(challengeBadge);
+        tr.appendChild(tdChallenge);
 
-        const tdValue = document.createElement("td");
-        tdValue.textContent = challengePts;
-        row.appendChild(tdValue);
+        // Type
+        const tdType = document.createElement("td");
+        const typeBadge = document.createElement('span');
+        typeBadge.className = log.type === 'full' ? 'badge badge-danger' : 'badge badge-success';
+        typeBadge.style.borderRadius = '8px';
+        typeBadge.textContent = log.type === 'full' ? 'Complet' : '1 tentative';
+        tdType.appendChild(typeBadge);
+        tr.appendChild(tdType);
 
-        const tdFails = document.createElement("td");
-        tdFails.textContent = `${entry.fail_count} / ${entry.max_attempts}`;
-        row.appendChild(tdFails);
-
-        const tdCost = document.createElement("td");
-        tdCost.textContent = `−${cost} pts`;
-        row.appendChild(tdCost);
-
-        const tdReq = document.createElement("td");
-        tdReq.textContent = entry.requested ? "📬 Oui" : "❌ Non";
-        row.appendChild(tdReq);
-
-        const tdAction = document.createElement("td");
-        const btn = document.createElement("button");
-        btn.className = "btn btn-sm btn-danger";
-        btn.textContent = "Débloquer";
-        btn.addEventListener("click", () => {
-          if (confirm(`Confirmer le déblocage de "${entry.team_name}" pour "${entry.challenge_name}" ?`)) {
-            CTFd.fetch("/api/v1/attempts_remover/admin_unblock", {
-              method: "POST",
-              credentials: "same-origin",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({
-                team_id: entry.team_id,
-                challenge_id: entry.challenge_id
-              })
-            })
-            .then(res => res.json())
-            .then(result => {
-              if (result.success) {
-                alert(`✅ ${entry.team_name} débloquée (−${result.cost} pts)`);
-                loadBlockedTeams();
-                loadUnblockLogs();
-              } else {
-                alert("❌ Erreur : " + (result.error || "inconnue"));
-              }
-            });
-          }
-        });
-        tdAction.appendChild(btn);
-        row.appendChild(tdAction);
-
-        tbody.appendChild(row);
+        tbody.appendChild(tr);
       });
 
       table.appendChild(tbody);
-      container.appendChild(table);
+      tableWrapper.appendChild(table);
+      container.appendChild(tableWrapper);
+    }
 
-      const filterInput = document.getElementById("team-filter");
-      filterInput.addEventListener("input", () => {
-        const query = filterInput.value.toLowerCase();
-        tbody.querySelectorAll("tr").forEach(row => {
-          const team = row.querySelector(".team-name").textContent.toLowerCase();
-          row.style.display = team.includes(query) ? "" : "none";
+    function renderPagination() {
+      pagination.innerHTML = "";
+      
+      for (let i = 1; i <= totalPages; i++) {
+        const li = document.createElement("li");
+        li.className = "page-item" + (i === currentPage ? " active" : "");
+        
+        const a = document.createElement("a");
+        a.className = "page-link";
+        a.href = "#";
+        a.style.borderRadius = '8px';
+        a.style.margin = '0 2px';
+        a.textContent = i;
+        
+        a.addEventListener("click", (e) => {
+          e.preventDefault();
+          currentPage = i;
+          renderPage(currentPage);
+          renderPagination();
         });
+        
+        li.appendChild(a);
+        pagination.appendChild(li);
+      }
+    }
+
+    renderPage(currentPage);
+    if (totalPages > 1) renderPagination();
+  })
+  .catch(e => {
+    console.error("Erreur lors du chargement des logs:", e);
+    showToast("Erreur lors du chargement des logs", 'danger');
+  });
+}
+
+// Initialisation au chargement du DOM
+document.addEventListener("DOMContentLoaded", function () {
+  // Setup du formulaire de configuration
+  const configForm = document.getElementById("remover-form");
+  if (configForm) {
+    configForm.addEventListener("submit", function (e) {
+      e.preventDefault();
+      const payload = {
+        mode: document.getElementById("mode").value,
+        fixed_cost: parseInt(document.getElementById("fixed_cost").value) || 0,
+        percent_cost: parseInt(document.getElementById("percent_cost").value) || 0
+      };
+
+      CTFd.fetch("/api/v1/attempts_remover/config", {
+        method: "POST",
+        credentials: "same-origin",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      })
+      .then(res => res.json())
+      .then(res => {
+        if (res.success) {
+          showToast("Configuration enregistrée avec succès !");
+          loadConfig();
+        } else {
+          showToast("Erreur : " + (res.error || "inconnue"), 'danger');
+        }
+      })
+      .catch(e => {
+        console.error("Erreur lors de l'enregistrement:", e);
+        showToast("Erreur lors de l'enregistrement", 'danger');
       });
     });
   }
 
-  function loadUnblockLogs() {
-    CTFd.fetch("/api/v1/attempts_remover/unblock_logs", {
-      method: "GET",
-      credentials: "same-origin"
-    })
-    .then(res => res.json())
-    .then(logs => {
-      const container = document.getElementById("unblock-logs");
-      const pagination = document.getElementById("pagination");
-      pagination.innerHTML = "";
-
-      if (!logs || logs.length === 0) {
-        container.textContent = "Aucun déblocage récent enregistré.";
-        return;
-      }
-
-      const itemsPerPage = 10;
-      let currentPage = 1;
-      const totalPages = Math.ceil(logs.length / itemsPerPage);
-
-      function renderPage(page) {
-        const start = (page - 1) * itemsPerPage;
-        const end = start + itemsPerPage;
-        const currentLogs = logs.slice(start, end);
-
-        container.innerHTML = "";
-
-        const table = document.createElement("table");
-        table.className = "table table-sm table-striped text-center";
-
-        const thead = document.createElement("thead");
-        thead.className = "table-light";
-        const headerRow = document.createElement("tr");
-        ["Date", "Admin", "Équipe", "Challenge"].forEach(text => {
-          const th = document.createElement("th");
-          th.textContent = text;
-          headerRow.appendChild(th);
+  // Setup du bouton d'exclusion
+  const excludeBtn = document.getElementById("exclude-btn");
+  const challengeSelect = document.getElementById("challenge-select");
+  
+  if (challengeSelect) {
+    challengeSelect.addEventListener('change', function() {
+      if (excludeBtn) excludeBtn.disabled = !this.value;
+    });
+  }
+  
+  if (excludeBtn) {
+    excludeBtn.addEventListener('click', function() {
+      const challengeId = challengeSelect.value;
+      if (!challengeId) return;
+      
+      const challengeName = challengeSelect.selectedOptions[0].textContent;
+      const safeName = escapeHtml(challengeName);
+      
+      if (confirm(`Êtes-vous sûr de vouloir exclure "${safeName}" des demandes de déblocage ?`)) {
+        CTFd.fetch("/api/v1/attempts_remover/exclude_challenge", {
+          method: "POST",
+          credentials: "same-origin",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ challenge_id: parseInt(challengeId) })
+        })
+        .then(res => res.json())
+        .then(result => {
+          if (result.success) {
+            showToast(result.message);
+            loadAllChallenges();
+            loadExcludedChallenges();
+            updateStats();
+          } else {
+            showToast("Erreur : " + (result.error || "inconnue"), 'danger');
+          }
+        })
+        .catch(e => {
+          console.error("Erreur lors de l'exclusion:", e);
+          showToast("Erreur lors de l'exclusion", 'danger');
         });
-        thead.appendChild(headerRow);
-        table.appendChild(thead);
-
-        const tbody = document.createElement("tbody");
-        currentLogs.forEach(log => {
-          const tr = document.createElement("tr");
-
-          const tdDate = document.createElement("td");
-          tdDate.textContent = new Date(log.timestamp).toLocaleString();
-          tr.appendChild(tdDate);
-
-          const tdAdmin = document.createElement("td");
-          tdAdmin.textContent = log.admin_name;
-          tr.appendChild(tdAdmin);
-
-          const tdTeam = document.createElement("td");
-          tdTeam.textContent = log.team_name;
-          tr.appendChild(tdTeam);
-
-          const tdChallenge = document.createElement("td");
-          tdChallenge.textContent = log.challenge_name;
-          tr.appendChild(tdChallenge);
-
-          tbody.appendChild(tr);
-        });
-
-        table.appendChild(tbody);
-        container.appendChild(table);
       }
-
-      function renderPagination() {
-        pagination.innerHTML = "";
-        for (let i = 1; i <= totalPages; i++) {
-          const li = document.createElement("li");
-          li.className = "page-item" + (i === currentPage ? " active" : "");
-          const a = document.createElement("a");
-          a.className = "page-link";
-          a.href = "#";
-          a.textContent = i;
-          a.addEventListener("click", (e) => {
-            e.preventDefault();
-            currentPage = i;
-            renderPage(currentPage);
-            renderPagination();
-          });
-          li.appendChild(a);
-          pagination.appendChild(li);
-        }
-      }
-
-      renderPage(currentPage);
-      renderPagination();
     });
   }
 
+  // Charger les données initiales
+  loadConfig();
+  loadAllChallenges();
+  loadExcludedChallenges();
   loadBlockedTeams();
-  loadUnblockLogs();
+  updateStats();
+
+  // Gestion des onglets Bootstrap 4
+  if (typeof $ !== 'undefined') {
+    $('#adminTabs a').on('click', function (e) {
+      e.preventDefault();
+      $(this).tab('show');
+    });
+
+    // Charger les données quand on change d'onglet
+    $('#adminTabs a').on('shown.bs.tab', function (e) {
+      const target = $(e.target).attr('href');
+      if (target === '#blocked') {
+        loadBlockedTeams();
+      } else if (target === '#exclusions') {
+        loadExcludedChallenges();
+      } else if (target === '#logs') {
+        loadUnblockLogs();
+      }
+    });
+  } else {
+    // Fallback si jQuery n'est pas disponible
+    const tabLinks = document.querySelectorAll('#adminTabs a[data-toggle="pill"]');
+    tabLinks.forEach(link => {
+      link.addEventListener('click', function(e) {
+        e.preventDefault();
+        
+        // Remove active class from all tabs and content
+        tabLinks.forEach(l => l.classList.remove('active'));
+        document.querySelectorAll('.tab-pane').forEach(pane => {
+          pane.classList.remove('show', 'active');
+        });
+        
+        // Add active class to clicked tab
+        this.classList.add('active');
+        
+        // Show corresponding content
+        const targetId = this.getAttribute('href').substring(1);
+        const targetPane = document.getElementById(targetId);
+        if (targetPane) {
+          targetPane.classList.add('show', 'active');
+          
+          // Load data based on tab
+          if (targetId === 'blocked') {
+            loadBlockedTeams();
+          } else if (targetId === 'exclusions') {
+            loadExcludedChallenges();
+          } else if (targetId === 'logs') {
+            loadUnblockLogs();
+          }
+        }
+      });
+    });
+  }
 });
 </script>
 {% endblock %}

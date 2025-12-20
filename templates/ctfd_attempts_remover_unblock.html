@@ -4,76 +4,490 @@
 <head>
   <meta name="csrf-token" content="{{ session.get('nonce') }}">
 </head>
+<br><br><br>
 
-<style>
-  .refresh-button {
-      background-color: #4CAF50;
-      color: white;
-      padding: 12px 24px;
-      font-size: 16px;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-      transition: background-color 0.3s ease, transform 0.1s ease;
-    }
-
-    .refresh-button:hover {
-      background-color: #45a049;
-    }
-
-    .refresh-button:active {
-      transform: scale(0.97);
-    }
-</style>
-
-<div class="container mt-5">
-  <h1>Centre de déblocage des challenges - <a href="/challenges" class="btn btn-outline-secondary">
-  ← Retour aux challenges
-</a></h1>
-<br>
+<!-- Container centré avec marges -->
+<div class="container" style="max-width: 1000px; margin: 0 auto; padding: 0 30px;">
   
-  <div id="penalty-mode" class="alert alert-info mt-4">Chargement du mode de malus...</div>
-  <br>
-
-  <p class="text-muted">
-    Votre équipe a atteint le nombre maximum de tentatives sur certains challenges.<br>
-    Vous pouvez contacter le support pour demander une réinitialisation des tentatives.<br><br><hr><br>
-    <h3>Challenge(s) actuellement bloqué(s) :</h3>
-  </p>
-  <button class="refresh-button" onclick="location.reload();">
-    Rafraîchir le tableau
-  </button>
-
-  <div id="blocked-list" class="mt-4"></div>
-
-  <hr class="mt-5" />
-  <h4>
-     Demandes de déblocage traitées :
-    <button class="btn btn-sm btn-outline-secondary ms-2" id="toggle-history">Afficher ▼</button>
-  </h4>
-  <div id="history-section" class="table-responsive mt-3" style="display: none;">
-    <p>Chargement...</p>
+  <!-- CARD -->
+  <div class="row mb-4">
+    <div class="col-12">
+      <div class="custom-card-header d-flex align-items-center justify-content-between p-4">
+        <div class="d-flex align-items-center">
+          <div class="header-icon-wrapper mr-3">
+            <i class="fas fa-unlock-alt fa-2x"></i>
+          </div>
+          <div>
+            <h1 class="mb-1 font-weight-bold custom-text-primary">Centre de déblocage</h1>
+            <p class="mb-0 custom-text-muted">Gestion de vos challenges bloqués</p>
+          </div>
+        </div>
+        <div>
+          <a href="/challenges" class="btn custom-btn-secondary">
+            <i class="fas fa-arrow-left mr-2"></i>Retour aux challenges
+          </a>
+        </div>
+      </div>
+    </div>
   </div>
-  <nav>
-    <ul id="pagination" class="pagination justify-content-center" style="display: none;"></ul>
-  </nav>
+
+  <!-- Configuration du malus -->
+  <div class="row mb-4">
+    <div class="col-12">
+      <div id="penalty-mode" class="custom-alert-info p-3">
+        <div class="d-flex align-items-center justify-content-center">
+          <div class="spinner-border spinner-border-sm custom-text-info mr-3" role="status"></div>
+          <span class="font-weight-medium">Chargement de la configuration...</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card principale avec onglets -->
+  <div class="row mb-4">
+    <div class="col-12">
+      <div class="custom-card">
+        <!-- Header avec onglets -->
+        <div class="custom-card-header p-0">
+          <div class="custom-tabs d-flex">
+            <button class="custom-tab-btn active flex-fill text-center py-3" id="blocked-tab" data-target="blocked-content">
+              <i class="fas fa-exclamation-triangle mr-2"></i>Challenges bloqués
+            </button>
+            <button class="custom-tab-btn flex-fill text-center py-3" id="history-tab" data-target="history-content">
+              <i class="fas fa-history mr-2"></i>Historique
+            </button>
+          </div>
+        </div>
+
+        <!-- Contenu des onglets -->
+        <div class="custom-card-body p-4">
+          <!-- Onglet Challenges bloqués -->
+          <div id="blocked-content" class="tab-content-panel active">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+              <h4 class="mb-0 font-weight-bold custom-text-primary">
+                <i class="fas fa-lock mr-2 text-warning"></i>Challenges actuellement bloqués
+              </h4>
+              <button class="btn custom-btn-outline" onclick="location.reload();">
+                <i class="fas fa-sync-alt mr-2"></i>Actualiser
+              </button>
+            </div>
+            
+            <div id="blocked-list">
+              <div class="text-center py-5">
+                <div class="spinner-border custom-text-primary mb-3" role="status" style="width: 3rem; height: 3rem;"></div>
+                <p class="custom-text-muted font-weight-medium">Chargement en cours...</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Onglet Historique -->
+          <div id="history-content" class="tab-content-panel">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+              <h4 class="mb-0 font-weight-bold custom-text-primary">
+                <i class="fas fa-clock mr-2 text-info"></i>Demandes traitées
+              </h4>
+              <button class="btn custom-btn-outline" onclick="loadHistory();">
+                <i class="fas fa-sync-alt mr-2"></i>Actualiser
+              </button>
+            </div>
+            
+            <div id="history-section">
+              <div class="text-center py-4">
+                <div class="spinner-border spinner-border-sm custom-text-primary mb-2" role="status"></div>
+                <p class="custom-text-muted mb-0">Chargement...</p>
+              </div>
+            </div>
+            <nav>
+              <ul id="pagination" class="pagination justify-content-center mt-3"></ul>
+            </nav>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
-<br><br>
+
+<!-- Partie Discord 
+<div style="text-align: center; color: black; font-size: 14px;">
+  <p><i>*Pour toute question ou réclamation, merci d’ouvrir un ticket sur le <a href="https://DISCORD" style="color: #ffcd00;">discord</a> de l'évènement.</i></p>
+</div>
+<br>  -->
+
+<!-- Footer moderne -->
 <footer>
-  <p style="text-align: center;">
+  <p style="text-align: center; color: rgb(255, 255, 255);">
     <a href="https://hackolyte.fr/">
       <img src="https://hackolyte.fr/wp-content/uploads/2024/09/cropped-cropped-logo.png" alt="Hack'olyte logo" style="height: 30px; vertical-align: middle; margin-right: 5px;">
     </a>
-    Plugin développé par l'association <a href="https://hackolyte.fr/">Hack'olyte</a> - v1.1
-  </p>
+    Plugin développé par l'association <a href="https://hackolyte.fr/">Hack'olyte</a> - v2
+</p>
+
 </footer>
+<br><br>
+
+<style>
+
+body {
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  background: #0d1117 !important;
+}
+:root {
+  --custom-bg-primary: #ffffff;
+  --custom-bg-secondary: #f8f9fa;
+  --custom-bg-tertiary: #e9ecef;
+  --custom-text-primary: #212529;
+  --custom-text-secondary: #6c757d;
+  --custom-text-muted: #000000;
+  --custom-border: #dee2e6;
+  --custom-shadow: rgba(0, 0, 0, 0.1);
+  --custom-btn-primary: #007bff;
+  --custom-btn-secondary: #6c757d;
+  --custom-success: #28a745;
+  --custom-warning: #ffc107;
+  --custom-danger: #dc3545;
+  --custom-info: #17a2b8;
+}
+
+
+main {
+  
+  background: #0d1117 !important;
+}
+/* Styles de base */
+.custom-card {
+  background-color: var(--custom-bg-primary);
+  border: 1px solid var(--custom-border);
+  border-radius: 20px;
+  box-shadow: 0 4px 20px var(--custom-shadow);
+  overflow: hidden;
+}
+
+.custom-card-header {
+  background: linear-gradient(135deg, var(--custom-bg-secondary) 0%, var(--custom-bg-tertiary) 100%);
+  border-bottom: 1px solid var(--custom-border);
+  border-radius: 70px 70px 0 0;
+}
+
+.custom-card-body {
+  background-color: var(--custom-bg-primary);
+}
+
+.header-icon-wrapper {
+  background-color: var(--custom-bg-primary);
+  color: var(--custom-text-secondary);
+  padding: 12px;
+  border-radius: 50%;
+  box-shadow: 0 2px 10px var(--custom-shadow);
+}
+
+/* Onglets */
+.custom-tabs {
+  border-bottom: 1px solid var(--custom-border);
+}
+
+.custom-tab-btn {
+  background: none;
+  border: none;
+  color: var(--custom-text-secondary);
+  font-weight: 500;
+  transition: all 0.3s ease;
+  position: relative;
+  border-bottom: 3px solid transparent;
+}
+
+.custom-tab-btn:hover {
+  background-color: var(--custom-bg-secondary);
+  color: var(--custom-text-primary);
+}
+
+.custom-tab-btn.active {
+  color: var(--custom-btn-primary);
+  border-bottom-color: var(--custom-btn-primary);
+  background-color: var(--custom-bg-primary);
+}
+
+.custom-tab-btn:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+/* Contenu des onglets */
+.tab-content-panel {
+  display: none;
+}
+
+.tab-content-panel.active {
+  display: block;
+}
+
+/* Textes */
+.custom-text-primary {
+  color: var(--custom-text-primary) !important;
+}
+
+.custom-text-muted {
+  color: var(--custom-text-muted) !important;
+}
+
+.custom-text-info {
+  color: var(--custom-info) !important;
+}
+
+.custom-link {
+  color: var(--custom-btn-primary) !important;
+}
+
+/* Boutons */
+.custom-btn-secondary {
+  background-color: var(--custom-btn-secondary);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 10px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.custom-btn-secondary:hover {
+  background-color: var(--custom-text-secondary);
+  color: white;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 15px var(--custom-shadow);
+}
+
+.custom-btn-outline {
+  background: transparent;
+  color: var(--custom-text-secondary);
+  border: 1px solid var(--custom-border);
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.custom-btn-outline:hover {
+  background-color: var(--custom-bg-secondary);
+  color: var(--custom-text-primary);
+  border-color: var(--custom-text-secondary);
+}
+
+.fas {
+  margin-right: 8px !important;
+}
+
+/* Alertes */
+.custom-alert-info {
+  background-color: var(--custom-bg-secondary);
+  border: 1px solid var(--custom-border);
+  border-left: 4px solid var(--custom-info);
+  border-radius: 12px;
+  color: var(--custom-text-primary);
+}
+
+/* position petit bulle "i" */
+.custom-alert-info .fas {
+  align-self: flex-start;
+  margin-top: 40px; 
+}
+
+/* Cards de challenges */
+.challenge-card {
+  background-color: var(--custom-bg-primary);
+  border: 1px solid var(--custom-border);
+  border-radius: 15px;
+  transition: all 0.3s ease;
+  margin-bottom: 1rem;
+}
+
+.challenge-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px var(--custom-shadow);
+}
+
+.challenge-card.requested {
+  border-left: 4px solid var(--custom-success);
+  background-color: var(--custom-bg-secondary);
+}
+
+.challenge-card.pending {
+  border-left: 4px solid var(--custom-warning);
+}
+
+.challenge-icon {
+  background-color: var(--custom-bg-secondary);
+  color: var(--custom-text-secondary);
+  padding: 12px;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Tableaux */
+.table {
+  background-color: var(--custom-bg-primary);
+  color: var(--custom-text-primary);
+}
+
+.table th {
+  background: linear-gradient(135deg, var(--custom-bg-secondary) 0%, var(--custom-bg-tertiary) 100%);
+  border: none;
+  color: var(--custom-text-primary);
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  letter-spacing: 0.5px;
+  padding: 1rem;
+}
+
+.table td {
+  border-color: var(--custom-border);
+  padding: 1rem;
+  vertical-align: middle;
+  background-color: var(--custom-bg-primary) !important;
+  color: var(--custom-text-primary) !important;
+}
+
+.table-hover tbody tr:hover {
+  background-color: var(--custom-bg-secondary) !important;
+}
+
+.table tbody tr {
+  background-color: var(--custom-bg-primary);
+}
+
+.table tbody td {
+  vertical-align: middle !important;
+  color: #ffffff !important;
+  background-color: #ffffff !important;
+}
+
+/* Force la couleur du texte dans le tableau pour dark mode */
+.table .custom-text-primary {
+  color: var(--custom-text-primary) !important;
+}
+
+.table .custom-text-muted {
+  color: var(--custom-text-muted) !important;
+}
+
+.table .custom-text-info {
+  color: var(--custom-info) !important;
+}
+
+/* Pagination */
+.page-link {
+  background-color: var(--custom-bg-primary);
+  border-color: var(--custom-border);
+  color: var(--custom-text-primary);
+  border-radius: 8px;
+  margin: 0 2px;
+}
+
+.page-link:hover {
+  background-color: var(--custom-bg-secondary);
+  border-color: var(--custom-text-secondary);
+  color: var(--custom-text-primary);
+}
+
+.page-item.active .page-link {
+  background-color: var(--custom-btn-primary);
+  border-color: var(--custom-btn-primary);
+  color: white;
+}
+
+/* Espacement pour toutes les icônes dans le tableau */
+.table i {
+  margin-right: 8px !important;
+}
+
+/* Espacement spécifique pour les icônes dans les divs */
+.table .fas {
+  margin-right: 8px !important;
+}
+
+/* Pour être sûr que ça s'applique partout */
+.custom-card i.fas {
+  margin-right: 8px !important;
+}
+
+/* Badge */
+.custom-badge {
+  background-color: var(--custom-btn-primary);
+  color: white;
+  border-radius: 15px;
+  font-size: 0.75rem;
+}
+
+/* Footer */
+.custom-footer {
+  background: linear-gradient(135deg, var(--custom-bg-secondary) 0%, var(--custom-bg-tertiary) 100%);
+  border-top: 1px solid var(--custom-border);
+}
+
+/* Animations */
+.spinner-border {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .custom-tabs {
+    flex-direction: column;
+  }
+  
+  .custom-tab-btn {
+    border-bottom: none;
+    border-right: 3px solid transparent;
+  }
+  
+  .custom-tab-btn.active {
+    border-bottom: none;
+    border-right-color: var(--custom-btn-primary);
+  }
+}
+</style>
 
 <script>
+// Variables globales
+let historyLoaded = false;
+
 document.addEventListener("DOMContentLoaded", async () => {
   const container = document.getElementById("blocked-list");
   const modeBox = document.getElementById("penalty-mode");
-  container.textContent = "⏳ Chargement...";
+
+  // Gestion des onglets
+  const tabButtons = document.querySelectorAll('.custom-tab-btn');
+  const tabPanels = document.querySelectorAll('.tab-content-panel');
+
+  tabButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      const targetId = button.getAttribute('data-target');
+      
+      // Retirer active de tous les boutons et panneaux
+      tabButtons.forEach(btn => btn.classList.remove('active'));
+      tabPanels.forEach(panel => panel.classList.remove('active'));
+      
+      // Ajouter active au bouton cliqué et au panneau correspondant
+      button.classList.add('active');
+      document.getElementById(targetId).classList.add('active');
+      
+      // Charger l'historique seulement quand on clique sur l'onglet
+      if (targetId === 'history-content' && !historyLoaded) {
+        loadHistory();
+        historyLoaded = true;
+      }
+    });
+  });
 
   async function secureFetchJson(url, options = {}) {
     const res = await fetch(url, { credentials: "same-origin", ...options });
@@ -84,75 +498,268 @@ document.addEventListener("DOMContentLoaded", async () => {
     return res.json();
   }
 
+  // Fonction pour créer un élément avec du texte sécurisé
+  function createTextElement(tagName, text, className = '') {
+    const element = document.createElement(tagName);
+    element.textContent = text;
+    if (className) element.className = className;
+    return element;
+  }
+
   try {
     const config = await secureFetchJson("/api/v1/attempts_remover/config");
     if (!config) return;
 
     const { mode, fixed_cost, percent_cost } = config;
 
-    modeBox.textContent = "";
-    const strong = document.createElement("strong");
-    strong.className = "d-block text-center";
-    strong.textContent = mode === "fixed"
-      ? `Configuration actuelle du malus - Mode fixe : chaque déblocage coûte ${fixed_cost} points.`
-      : `Configuration actuelle du malus - Mode pourcentage : chaque déblocage coûte ${percent_cost}% des points du challenge.`;
-    modeBox.appendChild(strong);
+    // Mise à jour de la configuration
+    modeBox.className = "custom-alert-info p-3";
+    modeBox.innerHTML = '';
+    
+    const flexDiv = document.createElement('div');
+    flexDiv.className = 'd-flex align-items-center justify-content-center text-center';
+    
+    const icon = document.createElement('i');
+    icon.className = 'fas fa-info-circle mr-3 custom-text-info';  
+    
+    //const strong = createTextElement('strong', 'Configuration actuelle :  ');
+    //strong.className = 'custom-text-primary';
+    
+// Construire le texte de configuration
+let configText = mode === "fixed"
+  ? ` La récupération de l'intégralité de vos tentatives sur un challenge vous coûtera ${fixed_cost} points`
+  : `La récupération de l'intégralité de vos tentatives sur un challenge vous coûtera ${percent_cost}% des points du challenge`;
 
-    const [blocked, requests] = await Promise.all([
-      secureFetchJson("/api/v1/attempts_remover/blocked"),
-      secureFetchJson("/api/v1/attempts_remover/my_requests")
-    ]);
+// Ajouter l'info sur les tentatives uniques si activé
+if (config.single_attempt_enabled) {
+  const singleText = config.single_attempt_mode === "fixed"
+    ? `${config.single_attempt_fixed_cost} points`
+    : `${config.single_attempt_percent_cost}% des points du challenge`;
+  
+  configText += `, tandis que la récupération d'une seule tentative vous coûtera ${singleText}.`;
+}
+
+const span = createTextElement('span', configText, 'ml-2 custom-text-muted');
+    
+    flexDiv.appendChild(icon);
+    //flexDiv.appendChild(strong);
+    flexDiv.appendChild(span);
+    modeBox.appendChild(flexDiv);
+
+    // Ajouter la phrase d'avertissement
+    const warningDiv = document.createElement('div');
+    warningDiv.className = 'd-flex align-items-center justify-content-center text-center mt-2';
+    //warningDiv.style.fontStyle = 'italic';
+    warningDiv.style.fontSize = '14px';
+
+    const warningText = createTextElement('span', '⚠️ *Attention : les pertes de points liées à chaque déblocage s’additionnent et sont déduits de votre score global. Il est donc possible que vous dépensiez plus de points pour vous débloquer qu’un challenge ne peut vous en rapporter.', 'custom-text-muted');
+    warningDiv.appendChild(warningText);
+    modeBox.appendChild(warningDiv);
+
+    const [blocked, requests, singleRequests] = await Promise.all([
+    secureFetchJson("/api/v1/attempts_remover/blocked"),
+    secureFetchJson("/api/v1/attempts_remover/my_requests"),
+    secureFetchJson("/api/v1/attempts_remover/my_single_requests")
+  ]);
 
     if (!blocked) return;
 
+    container.innerHTML = '';
+
     if (blocked.length === 0) {
-      container.textContent = "✅ Aucun challenge bloqué actuellement.";
+      const emptyDiv = document.createElement('div');
+      emptyDiv.className = 'text-center py-5';
+      
+      const icon = document.createElement('i');
+      icon.className = 'fas fa-check-circle text-success mb-3';
+      icon.style.fontSize = '3rem';
+      
+      const title = createTextElement('h4', 'Aucun challenge bloqué', 'text-success font-weight-bold');
+      const subtitle = createTextElement('p', 'Vous pouvez accéder à tous les challenges !', 'custom-text-muted');
+      
+      emptyDiv.appendChild(icon);
+      emptyDiv.appendChild(title);
+      emptyDiv.appendChild(subtitle);
+      container.appendChild(emptyDiv);
     } else {
       const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-      const list = document.createElement("div");
 
       blocked.forEach(chal => {
         const cost = mode === "fixed"
           ? `${fixed_cost} pts`
-          : `${Math.ceil((chal.value || 0) * percent_cost / 100)} pts (${percent_cost}%)`;
+          : `${Math.max(1, Math.ceil((chal.value || 0) * percent_cost / 100))} pts (${percent_cost}%)`;
 
         const alreadyRequested = requests?.some(r => r.challenge_id === chal.challenge_id);
-        const btnId = `btn-${chal.challenge_id}`;
 
         const card = document.createElement("div");
-        card.className = "card mb-3 shadow-sm border-secondary";
+        card.className = `challenge-card p-4 ${alreadyRequested ? 'requested' : 'pending'}`;
 
-        const cardBody = document.createElement("div");
-        cardBody.className = "card-body";
+        // Header de la carte
+        const headerDiv = document.createElement("div");
+        headerDiv.className = "d-flex align-items-center justify-content-between mb-3";
+        
+        const leftDiv = document.createElement("div");
+        leftDiv.className = "d-flex align-items-center";
+        
+        const challengeIcon = document.createElement("div");
+        challengeIcon.className = "challenge-icon mr-3";
+        challengeIcon.innerHTML = '<i class="fas fa-flag"></i>';
+        
+        const titleDiv = document.createElement("div");
+        const title = createTextElement("h5", chal.challenge_name, "mb-1 font-weight-bold custom-text-primary");
+        const subtitle = createTextElement("small", `${chal.value} points`, "custom-text-muted");
+        titleDiv.appendChild(title);
+        titleDiv.appendChild(subtitle);
+        
+        leftDiv.appendChild(challengeIcon);
+        leftDiv.appendChild(titleDiv);
+        
+        const statusBadge = document.createElement("span");
+        statusBadge.className = `badge ${alreadyRequested ? 'badge-success' : 'badge-warning'} px-3 py-2`;
+        statusBadge.style.borderRadius = "10px";
+        statusBadge.textContent = alreadyRequested ? 'En cours' : 'Bloqué';
+        
+        headerDiv.appendChild(leftDiv);
+        headerDiv.appendChild(statusBadge);
 
-        const title = document.createElement("h5");
-        title.className = "card-title mb-2";
-        title.textContent = `Nom du challenge bloqué : ${chal.challenge_name} (${chal.value} pts)`;
 
-        const pAttempts = document.createElement("p");
-        pAttempts.className = "card-text";
-        pAttempts.textContent = `Tentatives échouées : ${chal.fail_count} / ${chal.max_attempts}`;
+        // Calculer le coût pour une tentative unique
+        const singleCost = config.single_attempt_mode === "fixed"
+          ? `${config.single_attempt_fixed_cost} pts`
+          : `${Math.max(1, Math.ceil((chal.value || 0) * config.single_attempt_percent_cost / 100))} pts (${config.single_attempt_percent_cost}%)`;
 
-        const pCost = document.createElement("p");
-        pCost.className = "card-text";
-        pCost.textContent = `Points retirés pour déblocage : ${cost}`;
+        // Informations
+        const infoDiv = document.createElement("div");
+        infoDiv.className = "row mb-4";
 
-        const btn = document.createElement("button");
-        btn.id = btnId;
-        btn.className = `btn ${alreadyRequested ? "btn-success disabled" : "btn-outline-primary"}`;
-        btn.textContent = alreadyRequested ? "✅ Demande en cours..." : "🛎️ Demander un déblocage";
+        const col1 = document.createElement("div");
+        col1.className = "col-sm-6 mb-2";
+        const attemptsP = document.createElement("p");
+        attemptsP.className = "mb-0";
+        const attemptsIcon = document.createElement("i");
+        attemptsIcon.className = "fas fa-exclamation-triangle text-warning mr-3";
+        attemptsP.appendChild(attemptsIcon);
+        attemptsP.appendChild(createTextElement("span", `Vos tentatives : ${chal.fail_count} / ${chal.max_attempts}`, "custom-text-primary"));
+        col1.appendChild(attemptsP);
 
-        cardBody.appendChild(title);
-        cardBody.appendChild(pAttempts);
-        cardBody.appendChild(pCost);
-        cardBody.appendChild(btn);
-        card.appendChild(cardBody);
-        list.appendChild(card);
+        const col2 = document.createElement("div");
+        col2.className = "col-sm-6 mb-2";
 
-        if (!alreadyRequested) {
-          btn.addEventListener("click", async () => {
-            btn.disabled = true;
-            btn.textContent = "📨 Envoi de la demande...";
+        // Coût déblocage complet
+        const costFullP = document.createElement("p");
+        costFullP.className = "mb-1";
+        const costFullIcon = document.createElement("i");
+        costFullIcon.className = "fas fa-unlock custom-text-info mr-3";
+        costFullP.appendChild(costFullIcon);
+        costFullP.appendChild(createTextElement("span", `Récuperer toutes ses tentatives : ${cost}`, "custom-text-primary"));
+        col2.appendChild(costFullP);
+
+        // Coût tentative unique (seulement si activé)
+        if (config.single_attempt_enabled) {
+          const costSingleP = document.createElement("p");
+          costSingleP.className = "mb-0";
+          const costSingleIcon = document.createElement("i");
+          costSingleIcon.className = "fas fa-plus custom-text-success mr-3";
+          costSingleIcon.style.color = "#000000";
+          costSingleP.appendChild(costSingleIcon);
+          costSingleP.appendChild(createTextElement("span", `Récuperer 1 tentative : ${singleCost}`, "custom-text-primary"));
+          col2.appendChild(costSingleP);
+        }
+
+        infoDiv.appendChild(col1);
+        infoDiv.appendChild(col2);
+
+        // Récupérer les demandes de tentative unique aussi
+        const alreadyRequestedSingle = singleRequests?.some(r => r.challenge_id === chal.challenge_id);
+
+        // Section boutons
+        const buttonsDiv = document.createElement("div");
+
+        // Afficher différents layouts selon les demandes
+        if (alreadyRequested) {
+          // Demande de déblocage complet en cours
+          const btn = document.createElement("button");
+          btn.className = "btn btn-success w-100 py-3";
+          btn.style.borderRadius = "12px";
+          btn.disabled = true;
+          btn.innerHTML = '<i class="fas fa-unlock mr-2"></i>Demande de déblocage complet en cours de traitement';
+          buttonsDiv.appendChild(btn);
+        } else if (alreadyRequestedSingle) {
+          // Demande de tentative unique en cours
+          const btn = document.createElement("button");
+          btn.className = "btn btn-info w-100 py-3";
+          btn.style.borderRadius = "12px";
+          btn.disabled = true;
+          btn.innerHTML = '<i class="fas fa-plus mr-2"></i>Demande de tentative supplémentaire en cours de traitement';
+          buttonsDiv.appendChild(btn);
+        } else {
+          // Aucune demande, afficher les options disponibles
+          const row1 = document.createElement("div");
+          row1.className = "row";
+          
+          // Bouton déblocage complet
+          const col1 = document.createElement("div");
+          col1.className = config.single_attempt_enabled ? "col-6" : "col-12";
+          const fullBtn = document.createElement("button");
+          fullBtn.className = "btn btn-primary w-100 py-3";
+          fullBtn.style.borderRadius = "12px";
+          fullBtn.innerHTML = '<i class="fas fa-unlock mr-2"></i>Déblocage complet';
+          col1.appendChild(fullBtn);
+          row1.appendChild(col1);
+          
+          // Bouton tentative unique (seulement si activé)
+          if (config.single_attempt_enabled) {
+            const col2 = document.createElement("div");
+            col2.className = "col-6";
+            const singleBtn = document.createElement("button");
+            singleBtn.className = "btn btn-success w-100 py-3";
+            singleBtn.style.borderRadius = "12px";
+            singleBtn.innerHTML = '<i class="fas fa-plus mr-2"></i> Recupérer 1 tentative';
+            col2.appendChild(singleBtn);
+            row1.appendChild(col2);
+            
+            // Event listener pour tentative unique
+            singleBtn.addEventListener("click", async () => {
+              singleBtn.disabled = true;
+              singleBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Envoi...';
+              
+              try {
+                const data = await secureFetchJson("/api/v1/attempts_remover/request_single_attempt", {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                    "CSRF-Token": csrfToken
+                  },
+                  body: JSON.stringify({ challenge_id: chal.challenge_id })
+                });
+
+                if (data?.success) {
+                singleBtn.innerHTML = '<i class="fas fa-check mr-2"></i>Demande envoyée ! Actualisation...';
+                // Recharger la page après 1 seconde pour voir le nouveau statut
+                setTimeout(() => {
+                  window.location.reload();
+                }, 1000);
+              } else {
+                  singleBtn.className = "btn btn-danger w-100 py-3";
+                  singleBtn.innerHTML = '<i class="fas fa-exclamation-triangle mr-2"></i>Erreur';
+                  singleBtn.disabled = false;
+                }
+              } catch (e) {
+                console.error(e);
+                singleBtn.className = "btn btn-danger w-100 py-3";
+                singleBtn.innerHTML = '<i class="fas fa-wifi mr-2"></i>Erreur réseau';
+                singleBtn.disabled = false;
+              }
+            });
+          }
+          
+          buttonsDiv.appendChild(row1);
+          
+          // Event listener pour déblocage complet
+          fullBtn.addEventListener("click", async () => {
+            fullBtn.disabled = true;
+            fullBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Envoi...';
+            
             try {
               const data = await secureFetchJson("/api/v1/attempts_remover/request_support", {
                 method: "POST",
@@ -164,119 +771,247 @@ document.addEventListener("DOMContentLoaded", async () => {
               });
 
               if (data?.success) {
-                btn.className = "btn btn-success disabled";
-                btn.textContent = "✅ Demande envoyée !";
+                fullBtn.innerHTML = '<i class="fas fa-check mr-2"></i>Demande envoyée ! Actualisation...';
+                // Recharger la page après 1 seconde pour voir le nouveau statut
+                setTimeout(() => {
+                  window.location.reload();
+                }, 1000);
               } else {
-                btn.className = "btn btn-danger";
-                btn.textContent = "❌ Erreur, réessayer";
-                btn.disabled = false;
+                fullBtn.className = "btn btn-danger w-100 py-3";
+                fullBtn.innerHTML = '<i class="fas fa-exclamation-triangle mr-2"></i>Erreur';
+                fullBtn.disabled = false;
               }
             } catch (e) {
               console.error(e);
-              btn.className = "btn btn-danger";
-              btn.textContent = "❌ Erreur réseau";
-              btn.disabled = false;
+              fullBtn.className = "btn btn-danger w-100 py-3";
+              fullBtn.innerHTML = '<i class="fas fa-wifi mr-2"></i>Erreur réseau';
+              fullBtn.disabled = false;
             }
           });
         }
+
+        card.appendChild(headerDiv);
+        card.appendChild(infoDiv);
+        card.appendChild(buttonsDiv);
+        container.appendChild(card);
+
       });
-
-      container.textContent = "";
-      container.appendChild(list);
-    }
-
-    // ----- Historique -----
-    const toggleBtn = document.getElementById("toggle-history");
-    const historyContainer = document.getElementById("history-section");
-    const pagination = document.getElementById("pagination");
-    let isVisible = false;
-
-    toggleBtn.addEventListener("click", () => {
-      isVisible = !isVisible;
-      historyContainer.style.display = isVisible ? "block" : "none";
-      pagination.style.display = isVisible ? "flex" : "none";
-      toggleBtn.innerText = isVisible ? "Masquer ▲" : "Afficher ▼";
-    });
-
-    const history = await secureFetchJson("/api/v1/attempts_remover/my_history");
-    if (!history) return;
-
-    if (history.length === 0) {
-      historyContainer.textContent = "Aucune demande traitée pour le moment.";
-      pagination.style.display = "none";
-    } else {
-      const itemsPerPage = 10;
-      let currentPage = 1;
-      const totalPages = Math.ceil(history.length / itemsPerPage);
-
-      function renderPage(page) {
-        const start = (page - 1) * itemsPerPage;
-        const end = start + itemsPerPage;
-        const currentLogs = history.slice(start, end);
-
-        historyContainer.innerHTML = "";
-
-        const table = document.createElement("table");
-        table.className = "table table-bordered text-center";
-
-        const thead = document.createElement("thead");
-        thead.className = "table-light";
-        const headerRow = document.createElement("tr");
-        ["Challenge concerné", "Date de traitement"].forEach(text => {
-          const th = document.createElement("th");
-          th.textContent = text;
-          headerRow.appendChild(th);
-        });
-        thead.appendChild(headerRow);
-        table.appendChild(thead);
-
-        const tbody = document.createElement("tbody");
-        currentLogs.forEach(log => {
-          const tr = document.createElement("tr");
-
-          const tdName = document.createElement("td");
-          tdName.textContent = log.challenge_name;
-          tr.appendChild(tdName);
-
-          const tdDate = document.createElement("td");
-          tdDate.textContent = new Date(log.timestamp).toLocaleString();
-          tr.appendChild(tdDate);
-
-          tbody.appendChild(tr);
-        });
-
-        table.appendChild(tbody);
-        historyContainer.appendChild(table);
-      }
-
-      function renderPagination() {
-        pagination.innerHTML = "";
-        for (let i = 1; i <= totalPages; i++) {
-          const li = document.createElement("li");
-          li.className = "page-item" + (i === currentPage ? " active" : "");
-          const a = document.createElement("a");
-          a.className = "page-link";
-          a.href = "#";
-          a.textContent = i;
-          a.addEventListener("click", (e) => {
-            e.preventDefault();
-            currentPage = i;
-            renderPage(currentPage);
-            renderPagination();
-          });
-          li.appendChild(a);
-          pagination.appendChild(li);
-        }
-      }
-
-      renderPage(currentPage);
-      renderPagination();
     }
 
   } catch (e) {
     console.error(e);
-    container.textContent = "❌ Erreur de chargement.";
+    container.innerHTML = `
+      <div class="text-center py-5">
+        <i class="fas fa-exclamation-triangle text-danger fa-3x mb-3"></i>
+        <h4 class="text-danger">Erreur de chargement</h4>
+        <p class="custom-text-muted">Impossible de charger les données. Veuillez réessayer.</p>
+        <button class="btn custom-btn-outline" onclick="location.reload();">
+          <i class="fas fa-sync-alt mr-2"></i>Réessayer
+        </button>
+      </div>
+    `;
   }
 });
+
+// Fonction pour charger l'historique
+async function loadHistory() {
+  const historyContainer = document.getElementById("history-section");
+  const pagination = document.getElementById("pagination");
+  
+  historyContainer.innerHTML = `
+    <div class="text-center py-4">
+      <div class="spinner-border spinner-border-sm custom-text-primary mb-2" role="status"></div>
+      <p class="custom-text-muted mb-0">Chargement...</p>
+    </div>
+  `;
+
+  try {
+    const response = await fetch("/api/v1/attempts_remover/my_history", { credentials: "same-origin" });
+    const history = await response.json();
+
+    if (!history || history.length === 0) {
+      historyContainer.innerHTML = `
+        <div class="text-center py-4">
+          <i class="fas fa-info-circle custom-text-muted fa-2x mb-2"></i>
+          <p class="custom-text-muted mb-0">Aucune demande traitée pour le moment</p>
+        </div>
+      `;
+      pagination.style.display = "none";
+      return;
+    }
+
+    const itemsPerPage = 10;
+    let currentPage = 1;
+    const totalPages = Math.ceil(history.length / itemsPerPage);
+
+    function renderPage(page) {
+      const start = (page - 1) * itemsPerPage;
+      const end = start + itemsPerPage;
+      const currentLogs = history.slice(start, end);
+
+      historyContainer.innerHTML = "";
+
+      const tableWrapper = document.createElement('div');
+      tableWrapper.className = 'table-responsive';
+      
+      const table = document.createElement("table");
+      table.className = "table table-hover";
+      table.style.borderRadius = '15px';
+      table.style.overflow = 'hidden';
+
+      const thead = document.createElement("thead");
+      const headerRow = document.createElement("tr");
+      
+      const headers = ["Challenge", "Traité par", "Type", "Coût", "Date de traitement"];
+      headers.forEach(text => {
+        const th = document.createElement("th");
+        th.textContent = text;
+        headerRow.appendChild(th);
+      });
+      thead.appendChild(headerRow);
+      table.appendChild(thead);
+
+      const tbody = document.createElement("tbody");
+      currentLogs.forEach(log => {
+        const tr = document.createElement("tr");
+
+        const tdName = document.createElement("td");
+        const nameDiv = document.createElement('div');
+        nameDiv.className = 'd-flex align-items-center';
+        const flagIcon = document.createElement('i');
+        flagIcon.className = 'fas fa-flag custom-text-info mr-3';
+        const nameText = document.createElement('span');
+        nameText.textContent = log.challenge_name;
+        nameText.className = 'font-weight-medium custom-text-primary';
+        nameDiv.appendChild(flagIcon);
+        nameDiv.appendChild(nameText);
+        tdName.appendChild(nameDiv);
+        tr.appendChild(tdName);
+
+        // Admin
+        const tdAdmin = document.createElement("td");
+        const adminDiv = document.createElement('div');
+        adminDiv.className = 'd-flex align-items-center';
+        const adminIcon = document.createElement('i');
+        adminIcon.className = 'fas fa-user-shield custom-text-info mr-3';
+        const adminText = document.createElement('span');
+        adminText.textContent = log.admin_name;
+        adminText.className = 'custom-text-primary';
+        adminDiv.appendChild(adminIcon);
+        adminDiv.appendChild(adminText);
+        tdAdmin.appendChild(adminDiv);
+        tr.appendChild(tdAdmin);
+
+        // Type
+        const tdType = document.createElement("td");
+        const typeDiv = document.createElement('div');
+        typeDiv.className = 'd-flex align-items-center';
+        const typeIcon = document.createElement('i');
+        typeIcon.className = log.type === 'full' ? 'fas fa-unlock custom-text-danger mr-3' : 'fas fa-plus custom-text-success mr-3';
+        const typeText = document.createElement('span');
+        typeText.textContent = log.type === 'full' ? 'Déblocage complet' : 'Tentative unique';
+        typeText.className = 'custom-text-primary';
+        typeDiv.appendChild(typeIcon);
+        typeDiv.appendChild(typeText);
+        tdType.appendChild(typeDiv);
+        tr.appendChild(tdType);
+
+        // Coût
+        const tdCost = document.createElement("td");
+        const costDiv = document.createElement('div');
+        costDiv.className = 'd-flex align-items-center';
+        const costIcon = document.createElement('i');
+        costIcon.className = 'fas fa-coins text-danger mr-3';
+        const costText = document.createElement('span');
+        costText.textContent = `-${log.cost} pts`;
+        costText.className = 'font-weight-bold text-danger';
+        costDiv.appendChild(costIcon);
+        costDiv.appendChild(costText);
+        tdCost.appendChild(costDiv);
+        tr.appendChild(tdCost);
+
+        const tdDate = document.createElement("td");
+        const dateDiv = document.createElement('div');
+        dateDiv.className = 'custom-text-muted';
+        const calIcon = document.createElement('i');
+        calIcon.className = 'fas fa-calendar-alt mr-3';
+        const dateText = document.createElement('span');
+        const date = new Date(log.timestamp);
+        date.setHours(date.getHours() + 2); // Ajouter 2 heures artificiellement
+        dateText.textContent = date.toLocaleString('fr-FR');
+        dateDiv.appendChild(calIcon);
+        dateDiv.appendChild(dateText);
+        tdDate.appendChild(dateDiv);
+        tr.appendChild(tdDate);
+
+        tbody.appendChild(tr);
+      });
+
+      table.appendChild(tbody);
+      tableWrapper.appendChild(table);
+      historyContainer.appendChild(tableWrapper);
+    }
+
+    function renderPagination() {
+      pagination.innerHTML = "";
+      for (let i = 1; i <= totalPages; i++) {
+        const li = document.createElement("li");
+        li.className = "page-item" + (i === currentPage ? " active" : "");
+        const a = document.createElement("a");
+        a.className = "page-link";
+        a.href = "#";
+        a.textContent = i;
+        a.addEventListener("click", (e) => {
+          e.preventDefault();
+          currentPage = i;
+          renderPage(currentPage);
+          renderPagination();
+        });
+        li.appendChild(a);
+        pagination.appendChild(li);
+      }
+    }
+
+    renderPage(currentPage);
+    if (totalPages > 1) renderPagination();
+
+    renderPage(currentPage);
+    if (totalPages > 1) renderPagination();
+
+    // Calculer le total des coûts
+    const totalCost = history.reduce((sum, log) => sum + (log.cost || 0), 0);
+    
+    // Ajouter la ligne de total
+    if (totalCost > 0) {
+      const totalDiv = document.createElement('div');
+      totalDiv.className = 'custom-alert-info p-3 mt-3 text-center';
+      totalDiv.style.borderRadius = '12px';
+      totalDiv.style.borderLeft = '4px solid var(--custom-danger)';
+      
+      const totalIcon = document.createElement('i');
+      totalIcon.className = 'fas fa-calculator custom-text-info mr-3';
+      
+      const totalText = document.createElement('span');
+      // totalText.className = 'font-weight-bold custom-text-primary';
+      totalText.textContent = `Au total, vos déblocages vous ont coûtés ${totalCost} points !`;
+      
+      // totalDiv.appendChild(totalIcon);
+      totalDiv.appendChild(totalText);
+      
+      // Insérer avant la pagination
+      const paginationParent = pagination.parentNode;
+      paginationParent.insertBefore(totalDiv, pagination);
+    }
+
+  } catch (e) {
+    console.error(e);
+    historyContainer.innerHTML = `
+      <div class="text-center py-4">
+        <i class="fas fa-exclamation-triangle text-danger fa-2x mb-2"></i>
+        <p class="text-danger mb-0">Erreur lors du chargement de l'historique</p>
+      </div>
+    `;
+  }
+}
 </script>
 {% endblock %}
