@@ -1,10 +1,12 @@
 {% extends "admin/base.html" %}
 
 {% block content %}
+<script>window._remover_force_lang = 'en';</script>
+<script src="/plugins/ctfd-attempts-remover/assets/remover_i18n.js"></script>
 <br>
-<!-- Container centré avec marges -->
+<!-- Centred container -->
 <div class="container" style="max-width: 1200px; margin: 0 auto; padding: 0 30px;">
-  <!-- Header avec gradient amélioré -->
+  <!-- Hero header -->
   <div class="row mb-5">
     <div class="col-12">
       <div class="card shadow-lg border-0" style="border-radius: 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);">
@@ -16,7 +18,7 @@
               </div>
               <div>
                 <h1 class="mb-2 font-weight-bold display-4">Attempts Remover</h1>
-                <p class="mb-0 lead opacity-90">Gestion avancée des déblocages de challenges</p>
+                <p class="mb-0 lead opacity-90" data-i18n="admin_subtitle">Advanced challenge unblock management</p>
               </div>
             </div>
             
@@ -26,7 +28,7 @@
     </div>
   </div>
 
-  <!-- Stats rapides avec design moderne -->
+  <!-- Quick stats cards -->
   <div class="row mb-5">
     <div class="col-lg-3 col-md-6 mb-4">
       <div class="card border-0 h-100" style="border-radius: 15px; background: linear-gradient(45deg, #ff6b6b, #ff8787);">
@@ -35,7 +37,7 @@
             <i class="fas fa-lock fa-lg"></i>
           </div>
           <h3 class="font-weight-bold mb-1" id="blocked-count">-</h3>
-          <p class="mb-0 font-weight-medium">Équipes bloquées</p>
+          <p class="mb-0 font-weight-medium" data-i18n="stat_blocked_teams">Blocked Teams</p>
         </div>
       </div>
     </div>
@@ -46,7 +48,7 @@
             <i class="fas fa-envelope fa-lg"></i>
           </div>
           <h3 class="font-weight-bold mb-1" id="requests-count">-</h3>
-          <p class="mb-0 font-weight-medium">Demandes en attente</p>
+          <p class="mb-0 font-weight-medium" data-i18n="stat_pending_requests">Pending requests</p>
         </div>
       </div>
     </div>
@@ -57,7 +59,7 @@
             <i class="fas fa-ban fa-lg"></i>
           </div>
           <h3 class="font-weight-bold mb-1" id="excluded-count">-</h3>
-          <p class="mb-0 font-weight-medium">Challenges exclus</p>
+          <p class="mb-0 font-weight-medium" data-i18n="stat_excluded_challenges">Excluded challenges</p>
         </div>
       </div>
     </div>
@@ -68,13 +70,13 @@
             <i class="fas fa-check-circle fa-lg"></i>
           </div>
           <h3 class="font-weight-bold mb-1" id="total-unblocks">-</h3>
-          <p class="mb-0 font-weight-medium">Déblocages total</p>
+          <p class="mb-0 font-weight-medium" data-i18n="stat_total_unblocks">Total unblocks</p>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Navigation par onglets moderne -->
+  <!-- Tab navigation -->
   <div class="row mb-4">
     <div class="col-12">
       <div class="card border-0 shadow-sm" style="border-radius: 15px;">
@@ -82,22 +84,22 @@
           <ul class="nav nav-pills nav-fill mb-0" id="adminTabs" role="tablist">
             <li class="nav-item m-1">
               <a class="nav-link active font-weight-bold py-3" id="config-tab" data-toggle="pill" href="#config" role="tab" style="border-radius: 12px;">
-                <i class="fas fa-cog mr-2"></i>Configuration
+                <i class="fas fa-cog mr-2"></i><span data-i18n="tab_config">Configuration</span>
               </a>
             </li>
             <li class="nav-item m-1">
               <a class="nav-link font-weight-bold py-3" id="blocked-tab" data-toggle="pill" href="#blocked" role="tab" style="border-radius: 12px;">
-                <i class="fas fa-lock mr-2"></i>Équipes bloquées
+                <i class="fas fa-lock mr-2"></i><span data-i18n="tab_blocked_admin">Blocked Teams</span>
               </a>
             </li>
             <li class="nav-item m-1">
               <a class="nav-link font-weight-bold py-3" id="exclusions-tab" data-toggle="pill" href="#exclusions" role="tab" style="border-radius: 12px;">
-                <i class="fas fa-ban mr-2"></i>Challenges exclus
+                <i class="fas fa-ban mr-2"></i><span data-i18n="tab_exclusions">Excluded Challenges</span>
               </a>
             </li>
             <li class="nav-item m-1">
               <a class="nav-link font-weight-bold py-3" id="logs-tab" data-toggle="pill" href="#logs" role="tab" style="border-radius: 12px;">
-                <i class="fas fa-history mr-2"></i>Historique
+                <i class="fas fa-history mr-2"></i><span data-i18n="tab_history">History</span>
               </a>
             </li>
           </ul>
@@ -107,41 +109,41 @@
   </div>
 
   <div class="tab-content">
-    <!-- Onglet Configuration -->
+    <!-- Configuration tab -->
      <div class="tab-pane fade show active" id="config">
   <div class="row justify-content-center">
     <div class="col-lg-10">
       <div class="card border-0 shadow-lg" style="border-radius: 20px;">
         <div class="card-header text-center py-4" style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border-radius: 20px 20px 0 0;">
           <h4 class="mb-0 font-weight-bold">
-            <i class="fas fa-cog mr-3 text-primary"></i>Configuration du malus
+            <i class="fas fa-cog mr-3 text-primary"></i><span data-i18n="config_title">Penalty Configuration</span>
           </h4>
         </div>
         <div class="card-body p-5">
           <div id="mode-box" class="alert alert-info mb-4" style="border-radius: 15px;">
             <div class="d-flex align-items-center justify-content-center">
               <div class="spinner-border spinner-border-sm mr-3" role="status"></div>
-              <span class="font-weight-medium">Chargement de la configuration...</span>
+              <span class="font-weight-medium" data-i18n="loading_config">Loading configuration...</span>
             </div>
           </div>
          
           <form id="remover-form">
             <div class="row">
               <div class="col-md-4 mb-4">
-                <label for="mode" class="font-weight-bold mb-2">Mode de malus</label>
+                <label for="mode" class="font-weight-bold mb-2" data-i18n="config_mode_label">Penalty mode</label>
                 <select id="mode" class="form-control form-control-lg" style="border-radius: 12px;">
-                  <option value="fixed">Coût fixe</option>
-                  <option value="percent">Pourcentage</option>
+                  <option value="fixed" data-i18n="mode_fixed">Fixed cost</option>
+                  <option value="percent" data-i18n="mode_percent">Percentage</option>
                 </select>
               </div>
              
               <div class="col-md-4 mb-4">
-                <label for="fixed_cost" class="font-weight-bold mb-2">Coût fixe (points)</label>
+                <label for="fixed_cost" class="font-weight-bold mb-2" data-i18n="config_fixed_cost_label">Fixed cost (points)</label>
                 <input type="number" id="fixed_cost" class="form-control form-control-lg" value="100" min="0" style="border-radius: 12px;">
               </div>
              
               <div class="col-md-4 mb-4">
-                <label for="percent_cost" class="font-weight-bold mb-2">Pourcentage du challenge</label>
+                <label for="percent_cost" class="font-weight-bold mb-2" data-i18n="config_percent_cost_label">Challenge percentage</label>
                 <div class="input-group">
                   <input type="number" id="percent_cost" class="form-control form-control-lg" value="10" min="0" max="100" style="border-radius: 12px 0 0 12px;">
                   <div class="input-group-append">
@@ -153,7 +155,7 @@
            
             <div class="text-center mt-4">
               <button type="submit" class="btn btn-primary btn-lg px-5 py-3" style="border-radius: 15px; background: linear-gradient(45deg, #667eea, #764ba2);">
-                <i class="fas fa-save mr-2"></i>Enregistrer la configuration
+                <i class="fas fa-save mr-2"></i><span data-i18n="btn_save_config">Save configuration</span>
               </button>
             </div>
           </form>
@@ -162,48 +164,48 @@
     </div>
   </div>
 
-  <!-- Nouvelle section pour tentative unique -->
+  <!-- Extra attempt section -->
   <div class="row justify-content-center mt-4">
     <div class="col-lg-10">
       <div class="card border-0 shadow-lg" style="border-radius: 20px;">
         <div class="card-header text-center py-4" style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border-radius: 20px 20px 0 0;">
           <h4 class="mb-0 font-weight-bold">
-            <i class="fas fa-plus-circle mr-3 text-success"></i>Configuration tentative supplémentaire
+            <i class="fas fa-plus-circle mr-3 text-success"></i><span data-i18n="single_attempt_title">Extra Attempt Configuration</span>
           </h4>
         </div>
         <div class="card-body p-5">
           <div class="alert alert-warning mb-4" style="border-radius: 15px;">
             <div class="d-flex align-items-center">
               <i class="fas fa-info-circle mr-3"></i>
-              <span>Permet aux équipes de récupérer <strong>une seule tentative</strong> au lieu de toutes leurs tentatives</span>
+              <span>Allows teams to recover <strong>a single attempt</strong> instead of all their attempts</span>
             </div>
           </div>
 
           <form id="single-attempt-form">
             <div class="row">
               <div class="col-md-3 mb-4">
-                <label for="single_attempt_enabled" class="font-weight-bold mb-2">Activer la fonctionnalité</label>
+                <label for="single_attempt_enabled" class="font-weight-bold mb-2" data-i18n="label_enable_feature">Enable feature</label>
                 <select id="single_attempt_enabled" class="form-control form-control-lg" style="border-radius: 12px;">
-                  <option value="false">Désactivé</option>
-                  <option value="true">Activé</option>
+                  <option value="false" data-i18n="disabled">Disabled</option>
+                  <option value="true" data-i18n="enabled">Enabled</option>
                 </select>
               </div>
-              
+
               <div class="col-md-3 mb-4">
-                <label for="single_attempt_mode" class="font-weight-bold mb-2">Mode de coût</label>
+                <label for="single_attempt_mode" class="font-weight-bold mb-2" data-i18n="label_cost_mode">Cost mode</label>
                 <select id="single_attempt_mode" class="form-control form-control-lg" style="border-radius: 12px;">
-                  <option value="fixed">Coût fixe</option>
-                  <option value="percent">Pourcentage</option>
+                  <option value="fixed" data-i18n="mode_fixed">Fixed cost</option>
+                  <option value="percent" data-i18n="mode_percent">Percentage</option>
                 </select>
               </div>
-              
+
               <div class="col-md-3 mb-4">
-                <label for="single_attempt_fixed_cost" class="font-weight-bold mb-2">Coût fixe (points)</label>
+                <label for="single_attempt_fixed_cost" class="font-weight-bold mb-2" data-i18n="config_fixed_cost_label">Fixed cost (points)</label>
                 <input type="number" id="single_attempt_fixed_cost" class="form-control form-control-lg" value="50" min="0" style="border-radius: 12px;">
               </div>
               
               <div class="col-md-3 mb-4">
-                <label for="single_attempt_percent_cost" class="font-weight-bold mb-2">Pourcentage du challenge</label>
+                <label for="single_attempt_percent_cost" class="font-weight-bold mb-2" data-i18n="config_percent_cost_label">Challenge percentage</label>
                 <div class="input-group">
                   <input type="number" id="single_attempt_percent_cost" class="form-control form-control-lg" value="5" min="0" max="100" style="border-radius: 12px 0 0 12px;">
                   <div class="input-group-append">
@@ -212,16 +214,16 @@
                 </div>
               </div>
               <div class="col-md-3 mb-4">
-                <label for="highlight_blocked_challenges" class="font-weight-bold mb-2">Surligner challenges bloqués</label>
+                <label for="highlight_blocked_challenges" class="font-weight-bold mb-2" data-i18n="label_highlight_blocked">Highlight blocked challenges</label>
                 <select id="highlight_blocked_challenges" class="form-control form-control-lg" style="border-radius: 12px;">
-                  <option value="false">Désactivé</option>
-                  <option value="true">Activé</option>
+                  <option value="false" data-i18n="disabled">Disabled</option>
+                  <option value="true" data-i18n="enabled">Enabled</option>
                 </select>
               </div>
             </div>
             <div class="text-center mt-4">
               <button type="submit" class="btn btn-success btn-lg px-5 py-3" style="border-radius: 15px; background: linear-gradient(45deg, #28a745, #20c997);">
-                <i class="fas fa-save mr-2"></i>Enregistrer cette configuration
+                <i class="fas fa-save mr-2"></i><span data-i18n="btn_save_this_config">Save this configuration</span>
               </button>
             </div>
           </form>
@@ -230,20 +232,70 @@
         </div>
       </div>
     </div>
-    
-  </div>
-</div>
-    
 
-    <!-- Onglet Équipes bloquées -->
+  </div>
+
+  <!-- Discord webhook section -->
+  <div class="row justify-content-center mt-4">
+    <div class="col-lg-10">
+      <div class="card border-0 shadow-lg" style="border-radius: 20px;">
+        <div class="card-header text-center py-4" style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border-radius: 20px 20px 0 0;">
+          <h4 class="mb-0 font-weight-bold">
+            <i class="fab fa-discord mr-3" style="color: #5865F2;"></i><span data-i18n="discord_title">Discord Notifications</span>
+          </h4>
+        </div>
+        <div class="card-body p-5">
+          <div class="alert alert-info mb-4" style="border-radius: 15px;">
+            <div class="d-flex align-items-center">
+              <i class="fas fa-info-circle mr-3"></i>
+              <span data-i18n="discord_info">A message will be sent to Discord on each team unblock request. Leave empty to disable.</span>
+            </div>
+          </div>
+          <form id="discord-form">
+            <div class="row">
+              <div class="col-md-8 mb-4">
+                <label for="discord_webhook_url" class="font-weight-bold mb-2" data-i18n="label_webhook_url">Discord Webhook URL</label>
+                <div class="input-group">
+                  <input type="password" id="discord_webhook_url" class="form-control form-control-lg"
+                         placeholder="https://discord.com/api/webhooks/..." style="border-radius: 12px 0 0 12px;">
+                  <div class="input-group-append">
+                    <button type="button" id="toggle-webhook-visibility" class="btn btn-outline-secondary" style="border-radius: 0 12px 12px 0; border-left: 0;">
+                      <i class="fas fa-eye" id="webhook-eye-icon"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4 mb-4">
+                <label for="discord_role_id" class="font-weight-bold mb-2"><span data-i18n="label_role_id">Role ID to ping</span> <small class="text-muted" data-i18n="label_role_id_optional">(optional)</small></label>
+                <input type="text" id="discord_role_id" class="form-control form-control-lg"
+                       placeholder="123456789012345678" style="border-radius: 12px;">
+              </div>
+            </div>
+            <div class="text-center mt-2">
+              <button type="submit" class="btn btn-lg px-5 py-3 mr-2" style="border-radius: 15px; background: linear-gradient(45deg, #5865F2, #7289da); color: white; border: none;">
+                <i class="fas fa-save mr-2"></i><span data-i18n="btn_save_discord">Save Discord configuration</span>
+              </button>
+              <button type="button" id="discord-test-btn" class="btn btn-secondary btn-lg px-4 py-3" style="border-radius: 15px;">
+                <i class="fas fa-paper-plane mr-2"></i><span data-i18n="btn_test">Test</span>
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+    <!-- Blocked teams tab -->
     <div class="tab-pane fade" id="blocked">
       <div class="card border-0 shadow-lg" style="border-radius: 20px;">
         <div class="card-header d-flex justify-content-between align-items-center py-4" style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border-radius: 20px 20px 0 0;">
           <h4 class="mb-0 font-weight-bold">
-            <i class="fas fa-lock mr-3 text-danger"></i>Équipes actuellement bloquées
+            <i class="fas fa-lock mr-3 text-danger"></i><span data-i18n="blocked_teams_title">Currently blocked teams</span>
           </h4>
           <button class="btn btn-outline-primary btn-lg" onclick="loadBlockedTeams()" style="border-radius: 12px;">
-            <i class="fas fa-sync-alt mr-2"></i>Actualiser
+            <i class="fas fa-sync-alt mr-2"></i><span data-i18n="refresh">Refresh</span>
           </button>
         </div>
         <div class="card-body p-4">
@@ -255,61 +307,77 @@
                     <i class="fas fa-search"></i>
                   </span>
                 </div>
-                <input type="text" id="team-filter" class="form-control form-control-lg" placeholder="Rechercher une équipe..." style="border-radius: 0 12px 12px 0;">
+                <input type="text" id="team-filter" class="form-control form-control-lg" data-i18n-placeholder="search_team_placeholder" placeholder="Search a team..." style="border-radius: 0 12px 12px 0;">
               </div>
             </div>
           </div>
+          <!-- Row colour legend -->
+          <div class="d-flex flex-wrap gap-2 mb-3" style="gap: .5rem;">
+            <span class="d-inline-flex align-items-center px-3 py-1 rounded" style="background:#fff3cd;border:1px solid #ffc107;font-size:.82rem;">
+              <span style="display:inline-block;width:12px;height:12px;background:#ffc107;border-radius:3px;margin-right:6px;"></span>
+              <strong>Yellow</strong>&nbsp;— full unblock requested
+            </span>
+            <span class="d-inline-flex align-items-center px-3 py-1 rounded" style="background:#d1ecf1;border:1px solid #17a2b8;font-size:.82rem;">
+              <span style="display:inline-block;width:12px;height:12px;background:#17a2b8;border-radius:3px;margin-right:6px;"></span>
+              <strong>Blue</strong>&nbsp;— single attempt requested
+            </span>
+            <span class="d-inline-flex align-items-center px-3 py-1 rounded" style="background:#f8f9fa;border:1px solid #dee2e6;font-size:.82rem;">
+              <span style="display:inline-block;width:12px;height:12px;background:#fff;border:1px solid #adb5bd;border-radius:3px;margin-right:6px;"></span>
+              <strong>White</strong>&nbsp;— no request from this team
+            </span>
+          </div>
+
           <div id="blocked-teams">
             <div class="text-center py-5">
               <div class="spinner-border text-primary mb-3" role="status" style="width: 3rem; height: 3rem;"></div>
-              <p class="text-muted font-weight-medium">Chargement en cours...</p>
+              <p class="text-muted font-weight-medium" data-i18n="loading">Loading...</p>
             </div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Onglet Challenges exclus -->
+    <!-- Excluded challenges tab -->
     <div class="tab-pane fade" id="exclusions">
       <div class="row">
-        <!-- Gestion des exclusions -->
+        <!-- Add exclusion -->
         <div class="col-lg-6 mb-4">
           <div class="card border-0 shadow-lg h-100" style="border-radius: 20px;">
             <div class="card-header text-center py-4" style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border-radius: 20px 20px 0 0;">
               <h5 class="mb-0 font-weight-bold">
-                <i class="fas fa-plus-circle mr-2 text-warning"></i>Exclure un challenge
+                <i class="fas fa-plus-circle mr-2 text-warning"></i><span data-i18n="exclude_title">Exclude a challenge</span>
               </h5>
             </div>
             <div class="card-body p-4">
               <div class="form-group mb-4">
-                <label for="challenge-select" class="font-weight-bold mb-3">Sélectionner un challenge</label>
+                <label for="challenge-select" class="font-weight-bold mb-3" data-i18n="select_challenge_label">Select a challenge</label>
                 <select id="challenge-select" class="form-control form-control-lg" style="border-radius: 12px;">
-                  <option value="">Chargement...</option>
+                  <option value="" data-i18n="loading">Loading...</option>
                 </select>
               </div>
               <button id="exclude-btn" class="btn btn-warning btn-lg btn-block py-3" disabled style="border-radius: 15px;">
-                <i class="fas fa-ban mr-2"></i>Exclure ce challenge
+                <i class="fas fa-ban mr-2"></i><span data-i18n="btn_exclude">Exclude this challenge</span>
               </button>
             </div>
           </div>
         </div>
 
-        <!-- Liste des exclusions -->
+        <!-- Current exclusion list -->
         <div class="col-lg-6 mb-4">
           <div class="card border-0 shadow-lg h-100" style="border-radius: 20px;">
             <div class="card-header d-flex justify-content-between align-items-center py-4" style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border-radius: 20px 20px 0 0;">
               <h5 class="mb-0 font-weight-bold">
-                <i class="fas fa-list mr-2 text-secondary"></i>Challenges exclus
+                <i class="fas fa-list mr-2 text-secondary"></i><span data-i18n="excluded_list_title">Excluded challenges</span>
               </h5>
               <button class="btn btn-outline-primary" onclick="loadExcludedChallenges()" style="border-radius: 12px;">
-                <i class="fas fa-sync-alt mr-1"></i>Actualiser
+                <i class="fas fa-sync-alt mr-1"></i><span data-i18n="refresh">Refresh</span>
               </button>
             </div>
             <div class="card-body p-4">
               <div id="excluded-challenges" class="scrollable-list">
                 <div class="text-center py-4">
                   <div class="spinner-border spinner-border-sm text-primary mb-2" role="status"></div>
-                  <p class="text-muted mb-0">Chargement...</p>
+                  <p class="text-muted mb-0" data-i18n="loading">Loading...</p>
                 </div>
               </div>
             </div>
@@ -318,22 +386,22 @@
       </div>
     </div>
 
-    <!-- Onglet Historique -->
+    <!-- History tab -->
     <div class="tab-pane fade" id="logs">
       <div class="card border-0 shadow-lg" style="border-radius: 20px;">
         <div class="card-header d-flex justify-content-between align-items-center py-4" style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border-radius: 20px 20px 0 0;">
           <h4 class="mb-0 font-weight-bold">
-            <i class="fas fa-history mr-3 text-info"></i>Historique des déblocages
+            <i class="fas fa-history mr-3 text-info"></i><span data-i18n="history_title">Unblock history</span>
           </h4>
           <button class="btn btn-outline-primary btn-lg" onclick="loadUnblockLogs()" style="border-radius: 12px;">
-            <i class="fas fa-sync-alt mr-2"></i>Actualiser
+            <i class="fas fa-sync-alt mr-2"></i><span data-i18n="refresh">Refresh</span>
           </button>
         </div>
         <div class="card-body p-4">
           <div id="unblock-logs">
             <div class="text-center py-5">
               <div class="spinner-border text-primary mb-3" role="status" style="width: 3rem; height: 3rem;"></div>
-              <p class="text-muted font-weight-medium">Chargement des logs...</p>
+              <p class="text-muted font-weight-medium" data-i18n="loading_logs">Loading logs...</p>
             </div>
           </div>
           <nav>
@@ -345,13 +413,10 @@
   </div>
 </div>
 <br>
-<!-- Footer moderne -->
+<!-- Footer -->
 <footer>
   <p style="text-align: center;">
-    <a href="https://hackolyte.fr/">
-      <img src="https://hackolyte.fr/wp-content/uploads/2024/09/cropped-cropped-logo.png" alt="Hack'olyte logo" style="height: 30px; vertical-align: middle; margin-right: 5px;">
-    </a>
-    Plugin développé par l'association <a href="https://hackolyte.fr/">Hack'olyte</a> - v2
+    Plugin developed by <a href="https://hackolyte.fr/">Hack'olyte</a> - v3.0
   </p>
 </footer>
 
@@ -467,17 +532,22 @@
 </style>
 
 <script>
-// Variables globales
+// i18n helper
+function _t(key, vars) {
+  return (window.RemoverI18n ? RemoverI18n.t(key, vars) : key);
+}
+
+// Global config
 let config = {};
 
-// Fonction sécurisée pour échapper le HTML et prévenir les XSS
+// Safely escape HTML to prevent XSS (used when building alert messages)
 function escapeHtml(text) {
   const div = document.createElement('div');
   div.textContent = text;
   return div.innerHTML;
 }
 
-// Fonction sécurisée pour créer des éléments avec du texte
+// Safe helper: creates an element and sets its text content (no innerHTML)
 function createTextElement(tagName, text, className = '') {
   const element = document.createElement(tagName);
   element.textContent = text;
@@ -485,13 +555,13 @@ function createTextElement(tagName, text, className = '') {
   return element;
 }
 
-// Toast helper function sécurisée
+// Show a simple alert toast (message is escaped before display)
 function showToast(message, type = 'success') {
   const icon = type === 'success' ? '✅' : '❌';
   alert(icon + ' ' + escapeHtml(message));
 }
 
-// Charger la configuration
+// Load penalty configuration and populate the form
 function loadConfig() {
   CTFd.fetch("/api/v1/attempts_remover/config", {
     method: "GET",
@@ -500,19 +570,18 @@ function loadConfig() {
   .then(res => res.json())
   .then(data => {
     config = data;
-    // Configs existantes
+    // Populate form fields
     document.getElementById("mode").value = data.mode;
     document.getElementById("fixed_cost").value = data.fixed_cost;
     document.getElementById("percent_cost").value = data.percent_cost;
 
-    // Nouvelles configs
     document.getElementById("single_attempt_enabled").value = data.single_attempt_enabled.toString();
     document.getElementById("single_attempt_mode").value = data.single_attempt_mode;
     document.getElementById("single_attempt_fixed_cost").value = data.single_attempt_fixed_cost;
     document.getElementById("single_attempt_percent_cost").value = data.single_attempt_percent_cost;
     document.getElementById("highlight_blocked_challenges").value = data.highlight_blocked_challenges.toString();
 
-    // Mise à jour de l'affichage existant
+    // Update the config summary banner
     const modeBox = document.getElementById("mode-box");
     modeBox.className = "alert alert-success mb-4";
     modeBox.innerHTML = '';
@@ -523,12 +592,12 @@ function loadConfig() {
     const icon = document.createElement('i');
     icon.className = 'fas fa-check-circle mr-3';
     
-    const strong = createTextElement('strong', 'Configuration actuelle : ');
-    
-    const span = createTextElement('span', 
-      data.mode === "fixed" 
-        ? `Mode fixe - ${data.fixed_cost} points par déblocage`
-        : `Mode pourcentage - ${data.percent_cost}% des points du challenge`,
+    const strong = createTextElement('strong', _t('current_config_label'));
+
+    const span = createTextElement('span',
+      data.mode === "fixed"
+        ? _t('mode_fixed_desc', { cost: data.fixed_cost })
+        : _t('mode_percent_desc', { pct: data.percent_cost }),
       'ml-2'
     );
     
@@ -538,13 +607,13 @@ function loadConfig() {
     modeBox.appendChild(flexDiv);
   })
   .catch(e => {
-    console.error("Erreur lors du chargement de la config:", e);
-    showToast("Erreur lors du chargement de la configuration", 'danger');
+    console.error("Error loading config:", e);
+    showToast(_t('error_load_config'), 'danger');
   });
 }
 
 
-// Setup du formulaire tentative unique
+// Handle the single-attempt configuration form submission
 const singleAttemptForm = document.getElementById("single-attempt-form");
 if (singleAttemptForm) {
   singleAttemptForm.addEventListener("submit", function (e) {
@@ -571,20 +640,111 @@ if (singleAttemptForm) {
     .then(res => res.json())
     .then(res => {
       if (res.success) {
-        showToast("Configuration des tentatives uniques enregistrée !");
+        showToast(_t('single_config_saved'));
         loadConfig();
       } else {
-        showToast("Erreur : " + (res.error || "inconnue"), 'danger');
+        showToast(_t('error_prefix') + (res.error || '?'), 'danger');
       }
     })
     .catch(e => {
-      console.error("Erreur lors de l'enregistrement:", e);
-      showToast("Erreur lors de l'enregistrement", 'danger');
+      console.error(e);
+      showToast(_t('error_saving'), 'danger');
     });
   });
 }
 
-// Charger tous les challenges pour la sélection
+// Charger la configuration Discord
+function loadDiscordConfig() {
+  CTFd.fetch("/api/v1/attempts_remover/discord_config", {
+    method: "GET",
+    credentials: "same-origin",
+  })
+  .then(res => res.json())
+  .then(data => {
+    document.getElementById("discord_webhook_url").value = data.webhook_url || "";
+    document.getElementById("discord_role_id").value = data.role_id || "";
+  })
+  .catch(e => console.error("Discord config load error:", e));
+}
+
+// Formulaire Discord
+const discordForm = document.getElementById("discord-form");
+if (discordForm) {
+  discordForm.addEventListener("submit", function(e) {
+    e.preventDefault();
+    const payload = {
+      webhook_url: document.getElementById("discord_webhook_url").value.trim(),
+      role_id: document.getElementById("discord_role_id").value.trim(),
+    };
+    CTFd.fetch("/api/v1/attempts_remover/discord_config", {
+      method: "POST",
+      credentials: "same-origin",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    })
+    .then(res => res.json())
+    .then(res => {
+      if (res.success) {
+        showToast(_t('discord_config_saved'));
+      } else {
+        showToast(_t('error_prefix') + (res.error || '?'), "danger");
+      }
+    })
+    .catch(e => {
+      console.error(e);
+      showToast(_t('error_saving'), "danger");
+    });
+  });
+}
+
+// Bouton test Discord
+function _setBtnContent(btn, iconClass, label) {
+  btn.textContent = '';
+  const icon = document.createElement('i');
+  icon.className = iconClass;
+  btn.appendChild(icon);
+  btn.appendChild(document.createTextNode('\u00a0' + label));
+}
+
+// Webhook URL eye toggle
+const toggleWebhookBtn = document.getElementById("toggle-webhook-visibility");
+const webhookInput = document.getElementById("discord_webhook_url");
+const webhookEyeIcon = document.getElementById("webhook-eye-icon");
+if (toggleWebhookBtn && webhookInput) {
+  toggleWebhookBtn.addEventListener("click", function() {
+    const isPassword = webhookInput.type === "password";
+    webhookInput.type = isPassword ? "text" : "password";
+    webhookEyeIcon.className = isPassword ? "fas fa-eye-slash" : "fas fa-eye";
+  });
+}
+
+const discordTestBtn = document.getElementById("discord-test-btn");
+if (discordTestBtn) {
+  discordTestBtn.addEventListener("click", function() {
+    discordTestBtn.disabled = true;
+    _setBtnContent(discordTestBtn, 'fas fa-spinner fa-spin mr-2', _t('sending'));
+    CTFd.fetch("/api/v1/attempts_remover/discord_test", {
+      method: "POST",
+      credentials: "same-origin",
+      headers: { "Content-Type": "application/json" },
+    })
+    .then(res => res.json())
+    .then(res => {
+      if (res.success) {
+        showToast(_t('test_sent'));
+      } else {
+        showToast(_t('error_prefix') + (res.error || '?'), "danger");
+      }
+    })
+    .catch(() => showToast(_t('network_error'), "danger"))
+    .finally(() => {
+      discordTestBtn.disabled = false;
+      _setBtnContent(discordTestBtn, 'fas fa-paper-plane mr-2', _t('btn_test'));
+    });
+  });
+}
+
+// Load all challenges for the exclude-challenge selector
 function loadAllChallenges() {
   CTFd.fetch("/api/v1/attempts_remover/all_challenges", {
     method: "GET",
@@ -597,23 +757,23 @@ function loadAllChallenges() {
     
     const defaultOption = document.createElement("option");
     defaultOption.value = "";
-    defaultOption.textContent = "Sélectionner un challenge...";
+    defaultOption.textContent = _t('select_challenge_opt');
     select.appendChild(defaultOption);
     
     challenges.filter(c => !c.excluded).forEach(challenge => {
       const option = document.createElement("option");
       option.value = challenge.id;
-      option.textContent = `${escapeHtml(challenge.name)} (${challenge.value} pts) - ${escapeHtml(challenge.category)}`;
+      option.textContent = `${challenge.name} (${challenge.value} pts) - ${challenge.category}`;
       select.appendChild(option);
     });
   })
   .catch(e => {
-    console.error("Erreur lors du chargement des challenges:", e);
-    showToast("Erreur lors du chargement des challenges", 'danger');
+    console.error("Error loading challenges:", e);
+    showToast(_t('error_load_challenges'), 'danger');
   });
 }
 
-// Charger les challenges exclus
+// Load and render the list of excluded challenges
 function loadExcludedChallenges() {
   CTFd.fetch("/api/v1/attempts_remover/excluded_challenges", {
     method: "GET",
@@ -631,7 +791,7 @@ function loadExcludedChallenges() {
       const icon = document.createElement('i');
       icon.className = 'fas fa-info-circle fa-2x mb-3';
       
-      const text = createTextElement('p', 'Aucun challenge exclu', 'mb-0 font-weight-medium');
+      const text = createTextElement('p', _t('no_excluded'), 'mb-0 font-weight-medium');
       
       emptyDiv.appendChild(icon);
       emptyDiv.appendChild(text);
@@ -651,8 +811,8 @@ function loadExcludedChallenges() {
       flexDiv.className = 'd-flex justify-content-between align-items-center';
       
       const infoDiv = document.createElement('div');
-      const title = createTextElement('h6', escapeHtml(item.challenge_name), 'mb-1 font-weight-bold');
-      const subtitle = createTextElement('small', `${item.challenge_value} pts - Exclu par ${escapeHtml(item.excluded_by)}`, 'text-muted');
+      const title = createTextElement('h6', item.challenge_name, 'mb-1 font-weight-bold');
+      const subtitle = createTextElement('small', _t('excluded_subtitle', { value: item.challenge_value, by: item.excluded_by }), 'text-muted');
       
       infoDiv.appendChild(title);
       infoDiv.appendChild(subtitle);
@@ -665,7 +825,7 @@ function loadExcludedChallenges() {
       const btnIcon = document.createElement('i');
       btnIcon.className = 'fas fa-check mr-1';
       btn.appendChild(btnIcon);
-      btn.appendChild(document.createTextNode('Réintégrer'));
+      btn.appendChild(document.createTextNode(_t('btn_reinclude')));
       
       flexDiv.appendChild(infoDiv);
       flexDiv.appendChild(btn);
@@ -675,15 +835,14 @@ function loadExcludedChallenges() {
     });
   })
   .catch(e => {
-    console.error("Erreur lors du chargement des exclusions:", e);
-    showToast("Erreur lors du chargement des exclusions", 'danger');
+    console.error("Error loading exclusions:", e);
+    showToast(_t('error_load_exclusions'), 'danger');
   });
 }
 
-// Réintégrer un challenge
+// Re-include a previously excluded challenge
 function includeChallenge(challengeId, challengeName) {
-  const safeName = escapeHtml(challengeName);
-  if (confirm(`Réintégrer "${safeName}" dans les demandes de déblocage ?`)) {
+  if (confirm(_t('reinclude_confirm', { name: challengeName }))) {
     CTFd.fetch("/api/v1/attempts_remover/include_challenge", {
       method: "POST",
       credentials: "same-origin",
@@ -698,17 +857,17 @@ function includeChallenge(challengeId, challengeName) {
         loadExcludedChallenges();
         updateStats();
       } else {
-        showToast("Erreur : " + (result.error || "inconnue"), 'danger');
+        showToast(_t('error_prefix') + (result.error || '?'), 'danger');
       }
     })
     .catch(e => {
-      console.error("Erreur lors de la réintégration:", e);
-      showToast("Erreur lors de la réintégration", 'danger');
+      console.error(e);
+      showToast(_t('error_reincluding'), 'danger');
     });
   }
 }
 
-// Mettre à jour les statistiques
+// Refresh the dashboard stat counters
 function updateStats() {
   Promise.all([
     CTFd.fetch("/api/v1/attempts_remover/admin_blocked", { credentials: "same-origin" }).then(r => r.json()),
@@ -717,18 +876,18 @@ function updateStats() {
   ]).then(([blocked, excluded, logs]) => {
     document.getElementById('blocked-count').textContent = blocked.length;
     
-    // Compter TOUTES les demandes (déblocage complet + tentatives uniques)
+    // Count all pending requests (full unblocks + single attempts)
     const totalRequests = blocked.filter(b => b.requested || b.single_attempt_requested).length;
     document.getElementById('requests-count').textContent = totalRequests;
     
     document.getElementById('excluded-count').textContent = excluded.length;
     document.getElementById('total-unblocks').textContent = logs.length;
   }).catch(e => {
-    console.error("Erreur lors du chargement des stats:", e);
+    console.error("Error loading stats:", e);
   });
 }
 
-// Charger les équipes bloquées
+// Load and render all blocked teams
 function loadBlockedTeams() {
   CTFd.fetch("/api/v1/attempts_remover/admin_blocked", {
     method: "GET",
@@ -737,49 +896,26 @@ function loadBlockedTeams() {
   .then(res => res.json())
   .then(data => {
     const container = document.getElementById("blocked-teams");
-    container.innerHTML = '';
-    
+    while (container.firstChild) container.removeChild(container.firstChild);
+
     if (!data || data.length === 0) {
       const emptyDiv = document.createElement('div');
       emptyDiv.className = 'text-center py-5';
-      
       const icon = document.createElement('i');
       icon.className = 'fas fa-check-circle text-success mb-3';
       icon.style.fontSize = '3rem';
-      
-      const title = createTextElement('h4', 'Aucun blocage détecté', 'text-success font-weight-bold');
-      const subtitle = createTextElement('p', 'Toutes les équipes peuvent accéder à leurs challenges !', 'text-muted');
-      
       emptyDiv.appendChild(icon);
-      emptyDiv.appendChild(title);
-      emptyDiv.appendChild(subtitle);
+      emptyDiv.appendChild(createTextElement('h4', _t('no_blocks_detected'), 'text-success font-weight-bold'));
+      emptyDiv.appendChild(createTextElement('p', _t('all_teams_access'), 'text-muted'));
       container.appendChild(emptyDiv);
       return;
     }
 
-    // Créer le tableau de manière sécurisée
-    const tableWrapper = document.createElement('div');
-    tableWrapper.className = 'table-responsive';
-    
-    const table = document.createElement("table");
-    table.className = "table table-hover";
-    table.style.borderRadius = '15px';
-    table.style.overflow = 'hidden';
+    const regular  = data.filter(item => !item.is_excluded);
+    const excluded = data.filter(item =>  item.is_excluded);
 
-    const thead = document.createElement("thead");
-    const headerRow = document.createElement("tr");
-    
-    const headers = ["Équipe", "Challenge", "Points", "Tentatives", "Perte", "Date blocage", "Demandes", "Actions"];
-    headers.forEach(text => {
-      const th = createTextElement("th", text);
-      headerRow.appendChild(th);
-    });
-    thead.appendChild(headerRow);
-    table.appendChild(thead);
-
-    const tbody = document.createElement("tbody");
-
-    data.forEach(item => {
+    // Helper: build a single table row for one blocked team/challenge pair
+    function buildRow(item) {
       const challengePts = item.value || 0;
       const cost = config.mode === "fixed"
         ? config.fixed_cost
@@ -787,186 +923,200 @@ function loadBlockedTeams() {
 
       const row = document.createElement("tr");
       if (item.requested) row.className = "table-warning";
+      else if (item.single_attempt_requested) row.className = "table-info";
 
-      // Équipe
+      // Team
       const tdTeam = document.createElement("td");
       tdTeam.className = "team-name";
       const teamDiv = document.createElement('div');
       teamDiv.className = 'd-flex align-items-center';
       const teamIcon = document.createElement('i');
       teamIcon.className = 'fas fa-users text-primary mr-2';
-      const teamText = createTextElement('span', escapeHtml(item.team_name));
       teamDiv.appendChild(teamIcon);
-      teamDiv.appendChild(teamText);
+      teamDiv.appendChild(createTextElement('span', item.team_name));
       tdTeam.appendChild(teamDiv);
       row.appendChild(tdTeam);
 
       // Challenge
       const tdChallenge = document.createElement("td");
-      const challengeDiv = document.createElement('div');
-
-      const challengeBadge = createTextElement('span', escapeHtml(item.challenge_name), 'badge badge-secondary');
+      const challengeBadge = createTextElement('span', item.challenge_name, 'badge badge-secondary');
       challengeBadge.style.borderRadius = '8px';
-      challengeDiv.appendChild(challengeBadge);
-
-      // Ajouter un badge si exclu
-      if (item.is_excluded) {
-        const excludedBadge = createTextElement('span', 'EXCLU', 'badge badge-warning ml-1');
-        excludedBadge.style.borderRadius = '8px';
-        excludedBadge.style.fontSize = '0.6rem';
-        excludedBadge.title = 'Challenge exclu du déblocage utilisateur';
-        challengeDiv.appendChild(excludedBadge);
-      }
-
-      tdChallenge.appendChild(challengeDiv);
+      tdChallenge.appendChild(challengeBadge);
       row.appendChild(tdChallenge);
 
       // Points
-      const tdPoints = createTextElement("td", challengePts.toString());
-      tdPoints.className = 'font-weight-bold';
+      const tdPoints = createTextElement("td", challengePts.toString(), 'font-weight-bold');
       row.appendChild(tdPoints);
 
-      // Tentatives
+      // Attempts
       const tdAttempts = document.createElement("td");
       const attemptsBadge = createTextElement('span', `${item.fail_count} / ${item.max_attempts}`, 'badge badge-danger');
       attemptsBadge.style.borderRadius = '8px';
       tdAttempts.appendChild(attemptsBadge);
       row.appendChild(tdAttempts);
 
-      // Perte
-      const tdCost = createTextElement("td", `-${cost} pts`, 'text-danger font-weight-bold');
-      row.appendChild(tdCost);
+      // Cost
+      row.appendChild(createTextElement("td", `-${cost} pts`, 'text-danger font-weight-bold'));
 
-      // Date de blocage
+      // Block date
       const tdDate = document.createElement("td");
       if (item.blocked_date) {
         const dateDiv = document.createElement('div');
         dateDiv.className = 'small text-muted';
         const calIcon = document.createElement('i');
         calIcon.className = 'fas fa-calendar-alt mr-1';
-        const date = new Date(item.blocked_date);
-        date.setHours(date.getHours() + 2); // Ajouter 2 heures artificiellement
-        const dateText = createTextElement('span', date.toLocaleString('fr-FR'));
         dateDiv.appendChild(calIcon);
-        dateDiv.appendChild(dateText);
+        dateDiv.appendChild(createTextElement('span', new Date(item.blocked_date).toLocaleString()));
         tdDate.appendChild(dateDiv);
       } else {
-        const unknownText = createTextElement('span', 'Inconnue', 'text-muted small');
-        tdDate.appendChild(unknownText);
+        tdDate.appendChild(createTextElement('span', _t('unknown_date'), 'text-muted small'));
       }
       row.appendChild(tdDate);
 
-      // Demande
+      // Requests
       const tdRequest = document.createElement("td");
       const requestsDiv = document.createElement('div');
       requestsDiv.className = 'd-flex flex-column gap-1';
-
       if (item.requested) {
-        const fullBadge = document.createElement('span');
-        fullBadge.className = 'badge badge-warning mb-1';
-        fullBadge.style.borderRadius = '8px';
-        fullBadge.style.fontSize = '0.7rem';
-        const clockIcon = document.createElement('i');
-        clockIcon.className = 'fas fa-unlock mr-1';
-        fullBadge.appendChild(clockIcon);
-        fullBadge.appendChild(document.createTextNode('Déblocage complet'));
-        requestsDiv.appendChild(fullBadge);
+        const b = document.createElement('span');
+        b.className = 'badge badge-warning mb-1';
+        b.style.cssText = 'border-radius:8px;font-size:0.7rem';
+        const ic = document.createElement('i'); ic.className = 'fas fa-unlock mr-1';
+        b.appendChild(ic); b.appendChild(document.createTextNode(_t('badge_full_unblock')));
+        requestsDiv.appendChild(b);
       }
-
       if (item.single_attempt_requested) {
-        const singleBadge = document.createElement('span');
-        singleBadge.className = 'badge badge-info mb-1';
-        singleBadge.style.borderRadius = '8px';
-        singleBadge.style.fontSize = '0.7rem';
-        const plusIcon = document.createElement('i');
-        plusIcon.className = 'fas fa-plus mr-1';
-        singleBadge.appendChild(plusIcon);
-        singleBadge.appendChild(document.createTextNode('Tentative unique'));
-        requestsDiv.appendChild(singleBadge);
+        const b = document.createElement('span');
+        b.className = 'badge badge-info mb-1';
+        b.style.cssText = 'border-radius:8px;font-size:0.7rem';
+        const ic = document.createElement('i'); ic.className = 'fas fa-plus mr-1';
+        b.appendChild(ic); b.appendChild(document.createTextNode(_t('badge_single_attempt')));
+        requestsDiv.appendChild(b);
       }
-
       if (!item.requested && !item.single_attempt_requested) {
-        const noBadge = createTextElement('span', 'Aucune', 'badge badge-secondary');
-        noBadge.style.borderRadius = '8px';
-        noBadge.style.fontSize = '0.7rem';
-        requestsDiv.appendChild(noBadge);
+        const b = createTextElement('span', _t('badge_none'), 'badge badge-secondary');
+        b.style.cssText = 'border-radius:8px;font-size:0.7rem';
+        requestsDiv.appendChild(b);
       }
-
       tdRequest.appendChild(requestsDiv);
       row.appendChild(tdRequest);
 
-      // Actions (les deux boutons)
+      // Actions
       const tdAction = document.createElement("td");
       const actionsDiv = document.createElement('div');
       actionsDiv.className = 'd-flex flex-column gap-1';
-
-      // Bouton déblocage complet
       const fullBtn = document.createElement("button");
       fullBtn.className = "btn btn-danger btn-sm mb-1";
-      fullBtn.style.borderRadius = '8px';
-      fullBtn.style.fontSize = '0.75rem';
-      fullBtn.onclick = function() {
-        unblockTeam(item.team_id, item.challenge_id, item.team_name, item.challenge_name);
-      };
-      const fullIcon = document.createElement('i');
-      fullIcon.className = 'fas fa-unlock mr-1';
-      fullBtn.appendChild(fullIcon);
-      fullBtn.appendChild(document.createTextNode('Déblocage complet'));
+      fullBtn.style.cssText = 'border-radius:8px;font-size:0.75rem';
+      fullBtn.onclick = function() { unblockTeam(item.team_id, item.challenge_id, item.team_name, item.challenge_name); };
+      const fullIc = document.createElement('i'); fullIc.className = 'fas fa-unlock mr-1';
+      fullBtn.appendChild(fullIc);
+      fullBtn.appendChild(document.createTextNode(_t('btn_full_unblock_action')));
       actionsDiv.appendChild(fullBtn);
-
-      // Bouton tentative unique (seulement si la fonctionnalité est activée)
       if (config.single_attempt_enabled) {
         const singleBtn = document.createElement("button");
         singleBtn.className = "btn btn-success btn-sm";
-        singleBtn.style.borderRadius = '8px';
-        singleBtn.style.fontSize = '0.75rem';
-        singleBtn.onclick = function() {
-          grantSingleAttempt(item.team_id, item.challenge_id, item.team_name, item.challenge_name);
-        };
-        const singleIcon = document.createElement('i');
-        singleIcon.className = 'fas fa-plus mr-1';
-        singleBtn.appendChild(singleIcon);
-        singleBtn.appendChild(document.createTextNode('1 tentative'));
+        singleBtn.style.cssText = 'border-radius:8px;font-size:0.75rem';
+        singleBtn.onclick = function() { grantSingleAttempt(item.team_id, item.challenge_id, item.team_name, item.challenge_name); };
+        const singleIc = document.createElement('i'); singleIc.className = 'fas fa-plus mr-1';
+        singleBtn.appendChild(singleIc);
+        singleBtn.appendChild(document.createTextNode(_t('btn_single_attempt_action')));
         actionsDiv.appendChild(singleBtn);
       }
-
       tdAction.appendChild(actionsDiv);
       row.appendChild(tdAction);
 
-      tbody.appendChild(row);
-    });
+      return row;
+    }
 
-    table.appendChild(tbody);
-    tableWrapper.appendChild(table);
-    container.appendChild(tableWrapper);
+    // Helper: build a full table section with a styled header gradient
+    function buildTableSection(items, headerGradient) {
+      const tableWrapper = document.createElement('div');
+      tableWrapper.className = 'table-responsive';
+      tableWrapper.style.cssText = 'border-radius:12px;overflow:hidden;border:1px solid #dee2e6';
 
-    // Filtre de recherche sécurisé
-    const filterInput = document.getElementById("team-filter");
-    const newFilterInput = filterInput.cloneNode(true);
-    filterInput.parentNode.replaceChild(newFilterInput, filterInput);
-    
-    newFilterInput.addEventListener("input", function() {
-      const query = this.value.toLowerCase();
-      tbody.querySelectorAll("tr").forEach(row => {
-        const team = row.querySelector(".team-name").textContent.toLowerCase();
-        row.style.display = team.includes(query) ? "" : "none";
+      const table = document.createElement("table");
+      table.className = "table table-hover mb-0";
+
+      const thead = document.createElement("thead");
+      thead.style.background = headerGradient;
+      const headerRow = document.createElement("tr");
+      [_t('table_team'), _t('table_challenge'), _t('table_points'), _t('table_attempts'), _t('table_loss'), _t('table_block_date'), _t('table_requests'), _t('table_actions')]
+        .forEach(text => {
+          const th = createTextElement("th", text);
+          th.style.cssText = 'font-weight:700;font-size:0.78rem;letter-spacing:0.8px;text-transform:uppercase;border:none;padding:0.85rem 1rem';
+          th.style.setProperty('color', '#ffffff', 'important');
+          th.style.setProperty('background', 'transparent', 'important');
+          headerRow.appendChild(th);
+        });
+      thead.appendChild(headerRow);
+      table.appendChild(thead);
+
+      const tbody = document.createElement("tbody");
+      items.forEach(item => tbody.appendChild(buildRow(item)));
+      table.appendChild(tbody);
+      tableWrapper.appendChild(table);
+      return { wrapper: tableWrapper, tbody };
+    }
+
+    // Render non-excluded blocked teams first
+    if (regular.length > 0) {
+      const regHeader = document.createElement('div');
+      regHeader.className = 'mb-3';
+      const regTitle = document.createElement('h6');
+      regTitle.className = 'font-weight-bold text-dark mb-1';
+      const lockIc = document.createElement('i'); lockIc.className = 'fas fa-lock mr-2 text-danger';
+      regTitle.appendChild(lockIc);
+      regTitle.appendChild(document.createTextNode('Blocked on challenges'));
+      regHeader.appendChild(regTitle);
+      container.appendChild(regHeader);
+
+      const { wrapper, tbody: regularTbody } = buildTableSection(regular, 'linear-gradient(135deg,#343a40 0%,#495057 100%)');
+      container.appendChild(wrapper);
+
+      // Search filter on regular table only
+      const filterInput = document.getElementById("team-filter");
+      const newFilterInput = filterInput.cloneNode(true);
+      filterInput.parentNode.replaceChild(newFilterInput, filterInput);
+      newFilterInput.addEventListener("input", function() {
+        const query = this.value.toLowerCase();
+        regularTbody.querySelectorAll("tr").forEach(row => {
+          const team = row.querySelector(".team-name");
+          row.style.display = (team && team.textContent.toLowerCase().includes(query)) ? "" : "none";
+        });
       });
-    });
+    }
+
+    // Render blocks on excluded challenges in a separate greyed-out section
+    if (excluded.length > 0) {
+      container.appendChild(document.createElement('br'));
+      const sep = document.createElement('div');
+      sep.className = 'mb-3';
+      const sepTitle = document.createElement('h6');
+      sepTitle.className = 'font-weight-bold text-warning mb-1';
+      const banIc = document.createElement('i'); banIc.className = 'fas fa-ban mr-2';
+      sepTitle.appendChild(banIc);
+      sepTitle.appendChild(document.createTextNode(_t('excluded_blocked_title')));
+      const sepSub = createTextElement('p', _t('excluded_blocked_subtitle'), 'text-muted small mb-2');
+      sep.appendChild(sepTitle);
+      sep.appendChild(sepSub);
+      container.appendChild(sep);
+
+      const { wrapper } = buildTableSection(excluded, 'linear-gradient(135deg,#1a1a1a 0%,#343a40 100%)');
+      container.appendChild(wrapper);
+    }
 
     updateStats();
   })
   .catch(e => {
-    console.error("Erreur lors du chargement des équipes bloquées:", e);
-    showToast("Erreur lors du chargement des équipes bloquées", 'danger');
+    console.error("Error loading blocked teams:", e);
+    showToast(_t('error_load_blocked'), 'danger');
   });
 }
 
-// Débloquer une équipe de manière sécurisée
+// Unblock a team
 function unblockTeam(teamId, challengeId, teamName, challengeName) {
-  const safeTeamName = escapeHtml(teamName);
-  const safeChallengeName = escapeHtml(challengeName);
-  
-  if (confirm(`Confirmer le déblocage de "${safeTeamName}" pour "${safeChallengeName}" ?`)) {
+  if (confirm(_t('confirm_unblock', { team: teamName, challenge: challengeName }))) {
     CTFd.fetch("/api/v1/attempts_remover/admin_unblock", {
       method: "POST",
       credentials: "same-origin",
@@ -979,26 +1129,23 @@ function unblockTeam(teamId, challengeId, teamName, challengeName) {
     .then(res => res.json())
     .then(result => {
       if (result.success) {
-        showToast(`${safeTeamName} débloquée avec succès (-${result.cost} pts)`);
+        showToast(_t('unblock_success', { team: teamName, cost: result.cost }));
         loadBlockedTeams();
         loadUnblockLogs();
       } else {
-        showToast("Erreur : " + (result.error || "inconnue"), 'danger');
+        showToast(_t('error_prefix') + (result.error || '?'), 'danger');
       }
     })
     .catch(e => {
-      console.error("Erreur lors du déblocage:", e);
-      showToast("Erreur lors du déblocage", 'danger');
+      console.error(e);
+      showToast(_t('error_unblocking'), 'danger');
     });
   }
 }
 
-// Accorder une tentative supplémentaire
+// Grant an extra attempt
 function grantSingleAttempt(teamId, challengeId, teamName, challengeName) {
-  const safeTeamName = escapeHtml(teamName);
-  const safeChallengeName = escapeHtml(challengeName);
-  
-  if (confirm(`Accorder une tentative supplémentaire à "${safeTeamName}" pour "${safeChallengeName}" ?`)) {
+  if (confirm(_t('confirm_grant_attempt', { team: teamName, challenge: challengeName }))) {
     CTFd.fetch("/api/v1/attempts_remover/admin_grant_single_attempt", {
       method: "POST",
       credentials: "same-origin",
@@ -1011,21 +1158,21 @@ function grantSingleAttempt(teamId, challengeId, teamName, challengeName) {
     .then(res => res.json())
     .then(result => {
       if (result.success) {
-        showToast(`${safeTeamName} a reçu une tentative supplémentaire (-${result.cost} pts)`);
+        showToast(_t('grant_success', { team: teamName, cost: result.cost }));
         loadBlockedTeams();
         loadUnblockLogs();
       } else {
-        showToast("Erreur : " + (result.error || "inconnue"), 'danger');
+        showToast(_t('error_prefix') + (result.error || '?'), 'danger');
       }
     })
     .catch(e => {
-      console.error("Erreur lors de l'attribution:", e);
-      showToast("Erreur lors de l'attribution", 'danger');
+      console.error(e);
+      showToast(_t('error_granting'), 'danger');
     });
   }
 }
 
-// Charger les logs de déblocage
+// Load and render the unblock action history
 function loadUnblockLogs() {
   CTFd.fetch("/api/v1/attempts_remover/unblock_logs", {
     method: "GET",
@@ -1047,7 +1194,7 @@ function loadUnblockLogs() {
       icon.className = 'fas fa-info-circle text-muted mb-3';
       icon.style.fontSize = '2rem';
       
-      const text = createTextElement('p', 'Aucun déblocage récent enregistré', 'text-muted font-weight-medium');
+      const text = createTextElement('p', _t('no_recent_unblocks'), 'text-muted font-weight-medium');
       
       emptyDiv.appendChild(icon);
       emptyDiv.appendChild(text);
@@ -1077,7 +1224,7 @@ function loadUnblockLogs() {
       const thead = document.createElement("thead");
       const headerRow = document.createElement("tr");
       
-      const headers = ["Date", "Admin", "Équipe", "Challenge", "Type"];
+      const headers = [_t('log_col_date'), _t('log_col_admin'), _t('log_col_team'), _t('log_col_challenge'), _t('log_col_type')];
       headers.forEach(text => {
         const th = createTextElement("th", text);
         headerRow.appendChild(th);
@@ -1097,8 +1244,7 @@ function loadUnblockLogs() {
         const calIcon = document.createElement('i');
         calIcon.className = 'fas fa-calendar-alt mr-1';
         const date = new Date(log.timestamp);
-        date.setHours(date.getHours() + 2); // Ajouter 2 heures artificiellement
-        const dateText = createTextElement('span', date.toLocaleString('fr-FR'));
+        const dateText = createTextElement('span', date.toLocaleString());
         dateDiv.appendChild(calIcon);
         dateDiv.appendChild(dateText);
         tdDate.appendChild(dateDiv);
@@ -1112,11 +1258,11 @@ function loadUnblockLogs() {
         const shieldIcon = document.createElement('i');
         shieldIcon.className = 'fas fa-user-shield mr-1';
         adminBadge.appendChild(shieldIcon);
-        adminBadge.appendChild(createTextElement('span', escapeHtml(log.admin_name)));
+        adminBadge.appendChild(createTextElement('span', log.admin_name));
         tdAdmin.appendChild(adminBadge);
         tr.appendChild(tdAdmin);
 
-        // Équipe
+        // Team
         const tdTeam = document.createElement("td");
         const teamBadge = document.createElement('span');
         teamBadge.className = 'badge badge-primary';
@@ -1124,13 +1270,13 @@ function loadUnblockLogs() {
         const usersIcon = document.createElement('i');
         usersIcon.className = 'fas fa-users mr-1';
         teamBadge.appendChild(usersIcon);
-        teamBadge.appendChild(createTextElement('span', escapeHtml(log.team_name)));
+        teamBadge.appendChild(createTextElement('span', log.team_name));
         tdTeam.appendChild(teamBadge);
         tr.appendChild(tdTeam);
 
         // Challenge
         const tdChallenge = document.createElement("td");
-        const challengeBadge = createTextElement('span', escapeHtml(log.challenge_name), 'badge badge-secondary');
+        const challengeBadge = createTextElement('span', log.challenge_name, 'badge badge-secondary');
         challengeBadge.style.borderRadius = '8px';
         tdChallenge.appendChild(challengeBadge);
         tr.appendChild(tdChallenge);
@@ -1140,7 +1286,7 @@ function loadUnblockLogs() {
         const typeBadge = document.createElement('span');
         typeBadge.className = log.type === 'full' ? 'badge badge-danger' : 'badge badge-success';
         typeBadge.style.borderRadius = '8px';
-        typeBadge.textContent = log.type === 'full' ? 'Complet' : '1 tentative';
+        typeBadge.textContent = log.type === 'full' ? _t('log_type_full') : _t('log_type_single');
         tdType.appendChild(typeBadge);
         tr.appendChild(tdType);
 
@@ -1182,14 +1328,16 @@ function loadUnblockLogs() {
     if (totalPages > 1) renderPagination();
   })
   .catch(e => {
-    console.error("Erreur lors du chargement des logs:", e);
-    showToast("Erreur lors du chargement des logs", 'danger');
+    console.error("Error loading logs:", e);
+    showToast(_t('error_load_logs'), 'danger');
   });
 }
 
-// Initialisation au chargement du DOM
+// Init on DOM ready
 document.addEventListener("DOMContentLoaded", function () {
-  // Setup du formulaire de configuration
+  if (window.RemoverI18n) RemoverI18n.apply();
+
+  // Handle penalty config form submission
   const configForm = document.getElementById("remover-form");
   if (configForm) {
     configForm.addEventListener("submit", function (e) {
@@ -1209,20 +1357,20 @@ document.addEventListener("DOMContentLoaded", function () {
       .then(res => res.json())
       .then(res => {
         if (res.success) {
-          showToast("Configuration enregistrée avec succès !");
+          showToast(_t('config_saved'));
           loadConfig();
         } else {
-          showToast("Erreur : " + (res.error || "inconnue"), 'danger');
+          showToast(_t('error_prefix') + (res.error || '?'), 'danger');
         }
       })
       .catch(e => {
-        console.error("Erreur lors de l'enregistrement:", e);
-        showToast("Erreur lors de l'enregistrement", 'danger');
+        console.error(e);
+        showToast(_t('error_saving'), 'danger');
       });
     });
   }
 
-  // Setup du bouton d'exclusion
+  // Handle the exclude-challenge button
   const excludeBtn = document.getElementById("exclude-btn");
   const challengeSelect = document.getElementById("challenge-select");
   
@@ -1238,9 +1386,7 @@ document.addEventListener("DOMContentLoaded", function () {
       if (!challengeId) return;
       
       const challengeName = challengeSelect.selectedOptions[0].textContent;
-      const safeName = escapeHtml(challengeName);
-      
-      if (confirm(`Êtes-vous sûr de vouloir exclure "${safeName}" des demandes de déblocage ?`)) {
+      if (confirm(_t('confirm_exclude', { name: challengeName }))) {
         CTFd.fetch("/api/v1/attempts_remover/exclude_challenge", {
           method: "POST",
           credentials: "same-origin",
@@ -1255,32 +1401,33 @@ document.addEventListener("DOMContentLoaded", function () {
             loadExcludedChallenges();
             updateStats();
           } else {
-            showToast("Erreur : " + (result.error || "inconnue"), 'danger');
+            showToast(_t('error_prefix') + (result.error || '?'), 'danger');
           }
         })
         .catch(e => {
-          console.error("Erreur lors de l'exclusion:", e);
-          showToast("Erreur lors de l'exclusion", 'danger');
+          console.error(e);
+          showToast(_t('error_load_exclusions'), 'danger');
         });
       }
     });
   }
 
-  // Charger les données initiales
+  // Load all data on page ready
   loadConfig();
+  loadDiscordConfig();
   loadAllChallenges();
   loadExcludedChallenges();
   loadBlockedTeams();
   updateStats();
 
-  // Gestion des onglets Bootstrap 4
+  // Bootstrap 4 tab handling
   if (typeof $ !== 'undefined') {
     $('#adminTabs a').on('click', function (e) {
       e.preventDefault();
       $(this).tab('show');
     });
 
-    // Charger les données quand on change d'onglet
+    // Lazy-load tab data on first show
     $('#adminTabs a').on('shown.bs.tab', function (e) {
       const target = $(e.target).attr('href');
       if (target === '#blocked') {
@@ -1292,7 +1439,7 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     });
   } else {
-    // Fallback si jQuery n'est pas disponible
+    // Vanilla JS fallback when jQuery is not available
     const tabLinks = document.querySelectorAll('#adminTabs a[data-toggle="pill"]');
     tabLinks.forEach(link => {
       link.addEventListener('click', function(e) {

@@ -2,7 +2,7 @@ if (window.location.pathname === "/challenges") {
   const container = document.querySelector('.row > .col-md-12');
 
   if (container && !document.querySelector('#btn-unblock-page')) {
-    // Création du bouton (toujours présent)
+    // Create the unblock button
     const wrapper = document.createElement('div');
     wrapper.className = "d-flex justify-content-center mb-4";
     wrapper.id = "btn-unblock-wrapper";
@@ -16,14 +16,14 @@ if (window.location.pathname === "/challenges") {
     icon.className = "fa fa-user-lock action-icon";
 
     const span = document.createElement('span');
-    span.innerText = "Demander un déblocage challenge";
+    span.innerText = (window.RemoverI18n ? RemoverI18n.t('btn_request_unblock') : "Request a challenge unblock");
 
     button.appendChild(icon);
     button.appendChild(span);
     wrapper.appendChild(button);
     container.prepend(wrapper);
 
-    // Style CSS de base (toujours présent)
+    // Inject base CSS styles
     if (!document.querySelector('#custom-unblock-style')) {
       const style = document.createElement('style');
       style.id = 'custom-unblock-style';
@@ -39,14 +39,14 @@ if (window.location.pathname === "/challenges") {
     }
   }
 
-  // Vérifier si le surlignage est activé
+  // Check whether challenge highlighting is enabled
   fetch('/api/v1/attempts_remover/config', {
     credentials: 'same-origin'
   })
   .then(response => response.json())
   .then(config => {
     if (config.highlight_blocked_challenges) {
-      // Ajouter les styles pour les challenges bloqués
+      // Inject styles for blocked challenge buttons
       const blockedStyle = document.createElement('style');
       blockedStyle.id = 'blocked-challenges-style';
       blockedStyle.innerHTML = `
@@ -83,34 +83,28 @@ if (window.location.pathname === "/challenges") {
       `;
       document.head.appendChild(blockedStyle);
 
-      // Variables pour l'optimisation
+      // State variables for cache and debounce optimisation
       let blockedChallengesCache = [];
       let lastBlockedUpdate = 0;
       let lastChallengeCount = 0;
       let markedButtons = new Set();
       let debounceTimer = null;
 
-      // Fonction pour marquer les challenges bloqués (optimisée)
+      // Mark blocked challenges with visual styling (uses a cache to minimise API calls)
       function markBlockedChallenges(forceRefresh = false) {
         const currentTime = Date.now();
         const currentButtons = document.querySelectorAll('[data-challenge-name], .challenge-button, .btn');
         const currentCount = currentButtons.length;
-        
-        // Conditions pour recharger les données :
-        // 1. Force refresh demandé
-        // 2. Plus de 60 secondes depuis la dernière maj
-        // 3. Nombre de challenges a changé
-        const shouldRefreshData = forceRefresh || 
-                                 (currentTime - lastBlockedUpdate) > 60000 || 
+
+        // Refresh the blocked-list if:
+        // 1. A forced refresh was requested
+        // 2. More than 60 seconds have passed since the last update
+        // 3. The number of visible challenge buttons changed
+        const shouldRefreshData = forceRefresh ||
+                                 (currentTime - lastBlockedUpdate) > 60000 ||
                                  currentCount !== lastChallengeCount;
 
         if (shouldRefreshData) {
-          // console.log('Rechargement des challenges bloqués...', {
-          //   forceRefresh,
-          //   timeSince: currentTime - lastBlockedUpdate,
-          //   countChanged: currentCount !== lastChallengeCount
-          // });
-
           fetch('/api/v1/attempts_remover/blocked', {
             credentials: 'same-origin'
           })
@@ -119,21 +113,21 @@ if (window.location.pathname === "/challenges") {
             blockedChallengesCache = blockedChallenges || [];
             lastBlockedUpdate = currentTime;
             lastChallengeCount = currentCount;
-            markedButtons.clear(); // Reset le cache des boutons marqués
+            markedButtons.clear(); // Reset the marked-buttons cache
             applyBlockedStyling();
           })
           .catch(e => {
-            console.log('Info: Pas de challenges bloqués détectés');
+            console.log('Info: No blocked challenges detected');
             blockedChallengesCache = [];
             lastBlockedUpdate = currentTime;
           });
         } else {
-          // Utiliser le cache
+          // Serve from cache
           applyBlockedStyling();
         }
       }
 
-      // Fonction pour appliquer le style aux boutons (séparée pour réutilisation)
+      // Apply the blocked class to matching challenge buttons (separated for cache reuse)
       function applyBlockedStyling() {
         if (blockedChallengesCache.length === 0) return;
 
@@ -144,7 +138,7 @@ if (window.location.pathname === "/challenges") {
           const btnId = btn.getAttribute('data-challenge-id');
           const buttonKey = `${btnId || 'no-id'}-${btnText.trim()}`;
           
-          // Éviter de retraiter le même bouton
+          // Skip buttons already processed in this pass
           if (markedButtons.has(buttonKey)) return;
 
           blockedChallengesCache.forEach(challenge => {
@@ -154,16 +148,16 @@ if (window.location.pathname === "/challenges") {
                                 buttonText.startsWith(challengeName + ' ') ||
                                 buttonText.startsWith(challengeName + '\n');
 
-            if (isExactMatch || btnId == challenge.challenge_id) {
+            if (isExactMatch || parseInt(btnId, 10) === challenge.challenge_id) {
               btn.classList.add('blocked');
-              btn.title = `🔒 Challenge bloqué (${challenge.fail_count}/${challenge.max_attempts} tentatives)`;
+              btn.title = (window.RemoverI18n ? RemoverI18n.t('challenge_locked_tooltip', { current: challenge.fail_count, max: challenge.max_attempts }) : `\uD83D\uDD12 Challenge locked (${challenge.fail_count}/${challenge.max_attempts} attempts)`);
               markedButtons.add(buttonKey);
             }
           });
         });
       }
 
-      // Fonction avec debounce pour éviter les appels multiples
+      // Debounced wrapper to avoid redundant calls during rapid DOM mutations
       function debouncedMarkBlocked() {
         clearTimeout(debounceTimer);
         debounceTimer = setTimeout(() => {
@@ -171,17 +165,17 @@ if (window.location.pathname === "/challenges") {
         }, 1000); // 1 seconde de debounce
       }
 
-      // Marquer les challenges bloqués au chargement
+      // Initial pass after the challenge list has had time to render
       setTimeout(() => markBlockedChallenges(true), 1000);
 
-      // Observer optimisé - ne réagit que si nécessaire
+      // Observe DOM mutations and re-mark only when relevant challenge elements are added
       const observer = new MutationObserver((mutations) => {
-        // Vérifier si des éléments pertinents ont été ajoutés
+        // Check whether any added node is (or contains) a challenge button
         const relevantChange = mutations.some(mutation => {
           return Array.from(mutation.addedNodes).some(node => {
             if (node.nodeType !== Node.ELEMENT_NODE) return false;
             
-            // Vérifier si c'est un challenge button ou contient des challenge buttons
+            // Check whether the added node is or contains a challenge button
             return node.classList?.contains('challenge-button') ||
                    node.querySelector?.('.challenge-button') ||
                    node.classList?.contains('btn') ||
@@ -192,7 +186,7 @@ if (window.location.pathname === "/challenges") {
         });
 
         if (relevantChange) {
-          // console.log('Changement pertinent détecté, marking blocked challenges...');
+          // console.log('Relevant change detected, marking blocked challenges...');
           debouncedMarkBlocked();
         }
       });
@@ -204,23 +198,12 @@ if (window.location.pathname === "/challenges") {
         characterData: false 
       });
 
-      // Événements pour forcer le refresh
+      // Force a refresh whenever the window regains focus (user switches back to the tab)
       window.addEventListener('focus', () => {
-        // Refresh quand la fenêtre reprend le focus (utilisateur revient)
         markBlockedChallenges(true);
       });
 
-      // Fonction de debug
-      window.attemptsRemoverDebug = function() {
-        console.log('📊 État attempts-remover:', {
-          cacheSize: blockedChallengesCache.length,
-          markedButtons: markedButtons.size,
-          lastUpdate: new Date(lastBlockedUpdate).toLocaleTimeString(),
-          timeSinceUpdate: Date.now() - lastBlockedUpdate,
-          currentButtons: document.querySelectorAll('[data-challenge-name], .challenge-button, .btn').length
-        });
-      };
-    }
+        }
   })
-  .catch(e => console.log('Config non chargée'));
+  .catch(e => console.log('Config not loaded'));
 }

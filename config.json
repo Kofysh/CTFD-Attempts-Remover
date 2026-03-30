@@ -1,7 +1,7 @@
 {
-  "name": "Attempts-remover",
+  "name": "Attempts Remover",
   "route": "/plugins/ctfd-attempts-remover/admin",
   "title": "CTFD-Attempts-Remover",
-  "description": "Plugin permettant de solliciter un déblocage total lorsqu’un challenge est verrouillé ou qu’une tentative supplémentaire",
-  "author": "Hack'olyte"
+  "description": "Plugin that allows teams to request a full unblock or an extra attempt on a locked challenge, with configurable penalties and Discord notifications. v3.0",
+  "author": "Hack’olyte"
 }

@@ -1,12 +1,10 @@
 {% extends "base.html" %}
 
 {% block content %}
-<head>
-  <meta name="csrf-token" content="{{ session.get('nonce') }}">
-</head>
+<script src="/plugins/ctfd-attempts-remover/assets/remover_i18n.js"></script>
 <br><br><br>
 
-<!-- Container centré avec marges -->
+<!-- Centred container -->
 <div class="container" style="max-width: 1000px; margin: 0 auto; padding: 0 30px;">
   
   <!-- CARD -->
@@ -14,87 +12,87 @@
     <div class="col-12">
       <div class="custom-card-header d-flex align-items-center justify-content-between p-4">
         <div class="d-flex align-items-center">
-          <div class="header-icon-wrapper mr-3">
+          <div class="header-icon-wrapper mr-4">
             <i class="fas fa-unlock-alt fa-2x"></i>
           </div>
-          <div>
-            <h1 class="mb-1 font-weight-bold custom-text-primary">Centre de déblocage</h1>
-            <p class="mb-0 custom-text-muted">Gestion de vos challenges bloqués</p>
+          <div style="padding-left: 8px;">
+            <h1 class="mb-1 font-weight-bold custom-text-primary" data-i18n="header_title">Unblock Center</h1>
+            <p class="mb-0 custom-text-muted" data-i18n="header_subtitle">Manage your blocked challenges</p>
           </div>
         </div>
         <div>
           <a href="/challenges" class="btn custom-btn-secondary">
-            <i class="fas fa-arrow-left mr-2"></i>Retour aux challenges
+            <i class="fas fa-arrow-left mr-2"></i><span data-i18n="back_to_challenges">Back to challenges</span>
           </a>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Configuration du malus -->
+  <!-- Penalty configuration banner -->
   <div class="row mb-4">
     <div class="col-12">
       <div id="penalty-mode" class="custom-alert-info p-3">
         <div class="d-flex align-items-center justify-content-center">
           <div class="spinner-border spinner-border-sm custom-text-info mr-3" role="status"></div>
-          <span class="font-weight-medium">Chargement de la configuration...</span>
+          <span class="font-weight-medium" data-i18n="loading_config">Loading configuration...</span>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Card principale avec onglets -->
+  <!-- Main card with tabs -->
   <div class="row mb-4">
     <div class="col-12">
       <div class="custom-card">
-        <!-- Header avec onglets -->
+        <!-- Tab header -->
         <div class="custom-card-header p-0">
           <div class="custom-tabs d-flex">
             <button class="custom-tab-btn active flex-fill text-center py-3" id="blocked-tab" data-target="blocked-content">
-              <i class="fas fa-exclamation-triangle mr-2"></i>Challenges bloqués
+              <i class="fas fa-exclamation-triangle mr-2"></i><span data-i18n="tab_blocked">Blocked Challenges</span>
             </button>
             <button class="custom-tab-btn flex-fill text-center py-3" id="history-tab" data-target="history-content">
-              <i class="fas fa-history mr-2"></i>Historique
+              <i class="fas fa-history mr-2"></i><span data-i18n="tab_history">History</span>
             </button>
           </div>
         </div>
 
-        <!-- Contenu des onglets -->
+        <!-- Tab content panels -->
         <div class="custom-card-body p-4">
-          <!-- Onglet Challenges bloqués -->
+          <!-- Blocked challenges tab -->
           <div id="blocked-content" class="tab-content-panel active">
             <div class="d-flex justify-content-between align-items-center mb-4">
               <h4 class="mb-0 font-weight-bold custom-text-primary">
-                <i class="fas fa-lock mr-2 text-warning"></i>Challenges actuellement bloqués
+                <i class="fas fa-lock mr-2 text-warning"></i><span data-i18n="blocked_section_title">Currently blocked challenges</span>
               </h4>
               <button class="btn custom-btn-outline" onclick="location.reload();">
-                <i class="fas fa-sync-alt mr-2"></i>Actualiser
+                <i class="fas fa-sync-alt mr-2"></i><span data-i18n="refresh">Refresh</span>
               </button>
             </div>
-            
+
             <div id="blocked-list">
               <div class="text-center py-5">
                 <div class="spinner-border custom-text-primary mb-3" role="status" style="width: 3rem; height: 3rem;"></div>
-                <p class="custom-text-muted font-weight-medium">Chargement en cours...</p>
+                <p class="custom-text-muted font-weight-medium" data-i18n="loading">Loading...</p>
               </div>
             </div>
           </div>
 
-          <!-- Onglet Historique -->
+          <!-- History tab -->
           <div id="history-content" class="tab-content-panel">
             <div class="d-flex justify-content-between align-items-center mb-4">
               <h4 class="mb-0 font-weight-bold custom-text-primary">
-                <i class="fas fa-clock mr-2 text-info"></i>Demandes traitées
+                <i class="fas fa-clock mr-2 text-info"></i><span data-i18n="processed_requests_title">Processed requests</span>
               </h4>
               <button class="btn custom-btn-outline" onclick="loadHistory();">
-                <i class="fas fa-sync-alt mr-2"></i>Actualiser
+                <i class="fas fa-sync-alt mr-2"></i><span data-i18n="refresh">Refresh</span>
               </button>
             </div>
             
             <div id="history-section">
               <div class="text-center py-4">
                 <div class="spinner-border spinner-border-sm custom-text-primary mb-2" role="status"></div>
-                <p class="custom-text-muted mb-0">Chargement...</p>
+                <p class="custom-text-muted mb-0" data-i18n="loading">Loading...</p>
               </div>
             </div>
             <nav>
@@ -107,59 +105,50 @@
   </div>
 </div>
 
-<!-- Partie Discord 
-<div style="text-align: center; color: black; font-size: 14px;">
-  <p><i>*Pour toute question ou réclamation, merci d’ouvrir un ticket sur le <a href="https://DISCORD" style="color: #ffcd00;">discord</a> de l'évènement.</i></p>
-</div>
-<br>  -->
-
-<!-- Footer moderne -->
-<footer>
-  <p style="text-align: center; color: rgb(255, 255, 255);">
-    <a href="https://hackolyte.fr/">
-      <img src="https://hackolyte.fr/wp-content/uploads/2024/09/cropped-cropped-logo.png" alt="Hack'olyte logo" style="height: 30px; vertical-align: middle; margin-right: 5px;">
-    </a>
-    Plugin développé par l'association <a href="https://hackolyte.fr/">Hack'olyte</a> - v2
-</p>
-
-</footer>
 <br><br>
 
 <style>
 
-body {
-  min-height: 100vh;
-  margin: 0;
-  padding: 0;
-  background: #0d1117 !important;
-}
-:root {
-  --custom-bg-primary: #ffffff;
-  --custom-bg-secondary: #f8f9fa;
-  --custom-bg-tertiary: #e9ecef;
-  --custom-text-primary: #212529;
+/* ── Adaptive theme: light / dark via data-bs-theme ── */
+:root,
+[data-bs-theme="light"] {
+  --custom-bg-primary:     #ffffff;
+  --custom-bg-secondary:   #f8f9fa;
+  --custom-bg-tertiary:    #e9ecef;
+  --custom-text-primary:   #212529;
   --custom-text-secondary: #6c757d;
-  --custom-text-muted: #000000;
-  --custom-border: #dee2e6;
-  --custom-shadow: rgba(0, 0, 0, 0.1);
-  --custom-btn-primary: #007bff;
-  --custom-btn-secondary: #6c757d;
-  --custom-success: #28a745;
-  --custom-warning: #ffc107;
-  --custom-danger: #dc3545;
-  --custom-info: #17a2b8;
+  --custom-text-muted:     #6c757d;
+  --custom-border:         #dee2e6;
+  --custom-shadow:         rgba(0, 0, 0, 0.08);
+  --custom-btn-primary:    #0d6efd;
+  --custom-btn-secondary:  #6c757d;
+  --custom-success:        #198754;
+  --custom-warning:        #ffc107;
+  --custom-danger:         #dc3545;
+  --custom-info:           #0dcaf0;
 }
 
-
-main {
-  
-  background: #0d1117 !important;
+[data-bs-theme="dark"] {
+  --custom-bg-primary:     #212529;
+  --custom-bg-secondary:   #2b3035;
+  --custom-bg-tertiary:    #343a40;
+  --custom-text-primary:   #dee2e6;
+  --custom-text-secondary: #adb5bd;
+  --custom-text-muted:     #adb5bd;
+  --custom-border:         #495057;
+  --custom-shadow:         rgba(0, 0, 0, 0.3);
+  --custom-btn-primary:    #0d6efd;
+  --custom-btn-secondary:  #6c757d;
+  --custom-success:        #198754;
+  --custom-warning:        #ffc107;
+  --custom-danger:         #dc3545;
+  --custom-info:           #0dcaf0;
 }
 /* Styles de base */
 .custom-card {
   background-color: var(--custom-bg-primary);
   border: 1px solid var(--custom-border);
-  border-radius: 20px;
+  border-radius: 60px;
   box-shadow: 0 4px 20px var(--custom-shadow);
   overflow: hidden;
 }
@@ -177,35 +166,50 @@ main {
 .header-icon-wrapper {
   background-color: var(--custom-bg-primary);
   color: var(--custom-text-secondary);
-  padding: 12px;
   border-radius: 50%;
   box-shadow: 0 2px 10px var(--custom-shadow);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  flex-shrink: 0;
+}
+
+.header-icon-wrapper .fas {
+  margin-right: 0 !important;
 }
 
 /* Onglets */
 .custom-tabs {
-  border-bottom: 1px solid var(--custom-border);
+  border-bottom: 2px solid var(--custom-border);
 }
 
 .custom-tab-btn {
-  background: none;
+  background: transparent;
   border: none;
   color: var(--custom-text-secondary);
   font-weight: 500;
-  transition: all 0.3s ease;
+  transition: all 0.25s ease;
   position: relative;
   border-bottom: 3px solid transparent;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  margin-bottom: -2px;
 }
 
 .custom-tab-btn:hover {
-  background-color: var(--custom-bg-secondary);
   color: var(--custom-text-primary);
 }
 
 .custom-tab-btn.active {
   color: var(--custom-btn-primary);
-  border-bottom-color: var(--custom-btn-primary);
-  background-color: var(--custom-bg-primary);
+  border-bottom: 3px solid var(--custom-btn-primary);
+  font-weight: 700;
+}
+
+.custom-tab-btn.active i {
+  color: var(--custom-btn-primary);
 }
 
 .custom-tab-btn:focus {
@@ -288,8 +292,24 @@ main {
 
 /* position petit bulle "i" */
 .custom-alert-info .fas {
-  align-self: flex-start;
-  margin-top: 40px; 
+  flex-shrink: 0;
+}
+
+/* Responsive challenge card header */
+.challenge-card-header {
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+@media (max-width: 576px) {
+  .container {
+    padding: 0 12px !important;
+  }
+  .challenge-card {
+    padding: 1rem !important;
+  }
+  .challenge-card-header .badge {
+    align-self: flex-start;
+  }
 }
 
 /* Cards de challenges */
@@ -318,13 +338,15 @@ main {
 .challenge-icon {
   background-color: var(--custom-bg-secondary);
   color: var(--custom-text-secondary);
-  padding: 12px;
   border-radius: 50%;
   width: 50px;
   height: 50px;
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
+  font-size: 1.1rem;
+  line-height: 1;
 }
 
 /* Tableaux */
@@ -352,6 +374,29 @@ main {
   color: var(--custom-text-primary) !important;
 }
 
+/* History table — bordered + header sombre */
+.history-table {
+  border: 2px solid #495057 !important;
+  overflow: hidden;
+}
+
+.history-table thead th {
+  background: linear-gradient(135deg, #343a40 0%, #495057 100%) !important;
+  color: #ffffff !important;
+  border: 1px solid #6c757d !important;
+  font-weight: 700;
+  font-size: 0.78rem;
+  letter-spacing: 0.8px;
+}
+
+.history-table tbody td {
+  border: 1px solid #dee2e6 !important;
+}
+
+[data-bs-theme="dark"] .history-table tbody td {
+  border-color: #495057 !important;
+}
+
 .table-hover tbody tr:hover {
   background-color: var(--custom-bg-secondary) !important;
 }
@@ -362,8 +407,8 @@ main {
 
 .table tbody td {
   vertical-align: middle !important;
-  color: #ffffff !important;
-  background-color: #ffffff !important;
+  color: var(--custom-text-primary) !important;
+  background-color: var(--custom-bg-primary) !important;
 }
 
 /* Force la couleur du texte dans le tableau pour dark mode */
@@ -400,17 +445,17 @@ main {
   color: white;
 }
 
-/* Espacement pour toutes les icônes dans le tableau */
+/* Spacing for all icons inside tables */
 .table i {
   margin-right: 8px !important;
 }
 
-/* Espacement spécifique pour les icônes dans les divs */
+/* Specific spacing for FontAwesome icons inside table divs */
 .table .fas {
   margin-right: 8px !important;
 }
 
-/* Pour être sûr que ça s'applique partout */
+/* Ensure consistent icon spacing throughout the card */
 .custom-card i.fas {
   margin-right: 8px !important;
 }
@@ -458,30 +503,30 @@ main {
 </style>
 
 <script>
-// Variables globales
+// i18n helper (falls back gracefully if RemoverI18n not yet loaded)
+function _t(key, vars) {
+  return (window.RemoverI18n ? RemoverI18n.t(key, vars) : key);
+}
+
 let historyLoaded = false;
 
 document.addEventListener("DOMContentLoaded", async () => {
+  if (window.RemoverI18n) RemoverI18n.apply();
+
   const container = document.getElementById("blocked-list");
   const modeBox = document.getElementById("penalty-mode");
 
-  // Gestion des onglets
+  // Tab management
   const tabButtons = document.querySelectorAll('.custom-tab-btn');
   const tabPanels = document.querySelectorAll('.tab-content-panel');
 
   tabButtons.forEach(button => {
     button.addEventListener('click', () => {
       const targetId = button.getAttribute('data-target');
-      
-      // Retirer active de tous les boutons et panneaux
       tabButtons.forEach(btn => btn.classList.remove('active'));
       tabPanels.forEach(panel => panel.classList.remove('active'));
-      
-      // Ajouter active au bouton cliqué et au panneau correspondant
       button.classList.add('active');
       document.getElementById(targetId).classList.add('active');
-      
-      // Charger l'historique seulement quand on clique sur l'onglet
       if (targetId === 'history-content' && !historyLoaded) {
         loadHistory();
         historyLoaded = true;
@@ -489,6 +534,14 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   });
 
+  function setBtnState(btn, iconClass, labelKey) {
+    btn.textContent = '';
+    const ic = document.createElement('i'); ic.className = iconClass; btn.appendChild(ic);
+    btn.appendChild(document.createTextNode('\u00a0' + _t(labelKey)));
+  }
+
+  // GET-only fetch wrapper; redirects to login if the session has expired.
+  // Use CTFd.fetch() for POST requests so CSRF is handled automatically.
   async function secureFetchJson(url, options = {}) {
     const res = await fetch(url, { credentials: "same-origin", ...options });
     if (res.redirected && res.url.includes("/login")) {
@@ -498,7 +551,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     return res.json();
   }
 
-  // Fonction pour créer un élément avec du texte sécurisé
+  // Safe helper: creates an element and sets its text content (no innerHTML)
   function createTextElement(tagName, text, className = '') {
     const element = document.createElement(tagName);
     element.textContent = text;
@@ -512,7 +565,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     const { mode, fixed_cost, percent_cost } = config;
 
-    // Mise à jour de la configuration
+    // Render the current penalty configuration banner
     modeBox.className = "custom-alert-info p-3";
     modeBox.innerHTML = '';
     
@@ -522,37 +575,31 @@ document.addEventListener("DOMContentLoaded", async () => {
     const icon = document.createElement('i');
     icon.className = 'fas fa-info-circle mr-3 custom-text-info';  
     
-    //const strong = createTextElement('strong', 'Configuration actuelle :  ');
-    //strong.className = 'custom-text-primary';
-    
-// Construire le texte de configuration
+    // Build the penalty configuration summary string
 let configText = mode === "fixed"
-  ? ` La récupération de l'intégralité de vos tentatives sur un challenge vous coûtera ${fixed_cost} points`
-  : `La récupération de l'intégralité de vos tentatives sur un challenge vous coûtera ${percent_cost}% des points du challenge`;
+  ? _t('penalty_fixed', { cost: fixed_cost })
+  : _t('penalty_percent', { pct: percent_cost });
 
-// Ajouter l'info sur les tentatives uniques si activé
 if (config.single_attempt_enabled) {
   const singleText = config.single_attempt_mode === "fixed"
-    ? `${config.single_attempt_fixed_cost} points`
-    : `${config.single_attempt_percent_cost}% des points du challenge`;
-  
-  configText += `, tandis que la récupération d'une seule tentative vous coûtera ${singleText}.`;
+    ? `${config.single_attempt_fixed_cost} pts`
+    : `${config.single_attempt_percent_cost}%`;
+  configText += ' — ' + _t('cost_single_attempt', { cost: singleText });
 }
 
 const span = createTextElement('span', configText, 'ml-2 custom-text-muted');
     
     flexDiv.appendChild(icon);
-    //flexDiv.appendChild(strong);
     flexDiv.appendChild(span);
     modeBox.appendChild(flexDiv);
 
-    // Ajouter la phrase d'avertissement
+    // Append a penalty warning below the configuration summary
     const warningDiv = document.createElement('div');
     warningDiv.className = 'd-flex align-items-center justify-content-center text-center mt-2';
     //warningDiv.style.fontStyle = 'italic';
     warningDiv.style.fontSize = '14px';
 
-    const warningText = createTextElement('span', '⚠️ *Attention : les pertes de points liées à chaque déblocage s’additionnent et sont déduits de votre score global. Il est donc possible que vous dépensiez plus de points pour vous débloquer qu’un challenge ne peut vous en rapporter.', 'custom-text-muted');
+    const warningText = createTextElement('span', _t('penalty_warning'), 'custom-text-muted');
     warningDiv.appendChild(warningText);
     modeBox.appendChild(warningDiv);
 
@@ -574,16 +621,14 @@ const span = createTextElement('span', configText, 'ml-2 custom-text-muted');
       icon.className = 'fas fa-check-circle text-success mb-3';
       icon.style.fontSize = '3rem';
       
-      const title = createTextElement('h4', 'Aucun challenge bloqué', 'text-success font-weight-bold');
-      const subtitle = createTextElement('p', 'Vous pouvez accéder à tous les challenges !', 'custom-text-muted');
+      const title = createTextElement('h4', _t('no_blocked'), 'text-success font-weight-bold');
+      const subtitle = createTextElement('p', _t('all_accessible'), 'custom-text-muted');
       
       emptyDiv.appendChild(icon);
       emptyDiv.appendChild(title);
       emptyDiv.appendChild(subtitle);
       container.appendChild(emptyDiv);
     } else {
-      const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-
       blocked.forEach(chal => {
         const cost = mode === "fixed"
           ? `${fixed_cost} pts`
@@ -594,9 +639,9 @@ const span = createTextElement('span', configText, 'ml-2 custom-text-muted');
         const card = document.createElement("div");
         card.className = `challenge-card p-4 ${alreadyRequested ? 'requested' : 'pending'}`;
 
-        // Header de la carte
+        // Card header: challenge name, point value, and status badge
         const headerDiv = document.createElement("div");
-        headerDiv.className = "d-flex align-items-center justify-content-between mb-3";
+        headerDiv.className = "d-flex align-items-center justify-content-between mb-3 challenge-card-header";
         
         const leftDiv = document.createElement("div");
         leftDiv.className = "d-flex align-items-center";
@@ -617,18 +662,19 @@ const span = createTextElement('span', configText, 'ml-2 custom-text-muted');
         const statusBadge = document.createElement("span");
         statusBadge.className = `badge ${alreadyRequested ? 'badge-success' : 'badge-warning'} px-3 py-2`;
         statusBadge.style.borderRadius = "10px";
-        statusBadge.textContent = alreadyRequested ? 'En cours' : 'Bloqué';
+        statusBadge.style.color = '#212529';
+        statusBadge.textContent = alreadyRequested ? _t('status_in_progress') : _t('status_blocked');
         
         headerDiv.appendChild(leftDiv);
         headerDiv.appendChild(statusBadge);
 
 
-        // Calculer le coût pour une tentative unique
+        // Compute the cost for a single attempt grant
         const singleCost = config.single_attempt_mode === "fixed"
           ? `${config.single_attempt_fixed_cost} pts`
           : `${Math.max(1, Math.ceil((chal.value || 0) * config.single_attempt_percent_cost / 100))} pts (${config.single_attempt_percent_cost}%)`;
 
-        // Informations
+        // Info row: attempt counter + penalty costs
         const infoDiv = document.createElement("div");
         infoDiv.className = "row mb-4";
 
@@ -639,22 +685,22 @@ const span = createTextElement('span', configText, 'ml-2 custom-text-muted');
         const attemptsIcon = document.createElement("i");
         attemptsIcon.className = "fas fa-exclamation-triangle text-warning mr-3";
         attemptsP.appendChild(attemptsIcon);
-        attemptsP.appendChild(createTextElement("span", `Vos tentatives : ${chal.fail_count} / ${chal.max_attempts}`, "custom-text-primary"));
+        attemptsP.appendChild(createTextElement("span", _t('attempts_label', { current: chal.fail_count, max: chal.max_attempts }), "custom-text-primary"));
         col1.appendChild(attemptsP);
 
         const col2 = document.createElement("div");
         col2.className = "col-sm-6 mb-2";
 
-        // Coût déblocage complet
+        // Full unblock cost line
         const costFullP = document.createElement("p");
         costFullP.className = "mb-1";
         const costFullIcon = document.createElement("i");
         costFullIcon.className = "fas fa-unlock custom-text-info mr-3";
         costFullP.appendChild(costFullIcon);
-        costFullP.appendChild(createTextElement("span", `Récuperer toutes ses tentatives : ${cost}`, "custom-text-primary"));
+        costFullP.appendChild(createTextElement("span", _t('cost_full_unblock', { cost }), "custom-text-primary"));
         col2.appendChild(costFullP);
 
-        // Coût tentative unique (seulement si activé)
+        // Single attempt cost line (only shown when the feature is enabled)
         if (config.single_attempt_enabled) {
           const costSingleP = document.createElement("p");
           costSingleP.className = "mb-0";
@@ -662,92 +708,87 @@ const span = createTextElement('span', configText, 'ml-2 custom-text-muted');
           costSingleIcon.className = "fas fa-plus custom-text-success mr-3";
           costSingleIcon.style.color = "#000000";
           costSingleP.appendChild(costSingleIcon);
-          costSingleP.appendChild(createTextElement("span", `Récuperer 1 tentative : ${singleCost}`, "custom-text-primary"));
+          costSingleP.appendChild(createTextElement("span", _t('cost_single_attempt', { cost: singleCost }), "custom-text-primary"));
           col2.appendChild(costSingleP);
         }
 
         infoDiv.appendChild(col1);
         infoDiv.appendChild(col2);
 
-        // Récupérer les demandes de tentative unique aussi
+        // Check whether a single-attempt request is already pending for this challenge
         const alreadyRequestedSingle = singleRequests?.some(r => r.challenge_id === chal.challenge_id);
 
-        // Section boutons
+        // Action buttons — layout depends on which requests are already pending
         const buttonsDiv = document.createElement("div");
 
-        // Afficher différents layouts selon les demandes
         if (alreadyRequested) {
-          // Demande de déblocage complet en cours
+          // A full unblock request is already in progress
           const btn = document.createElement("button");
           btn.className = "btn btn-success w-100 py-3";
           btn.style.borderRadius = "12px";
           btn.disabled = true;
-          btn.innerHTML = '<i class="fas fa-unlock mr-2"></i>Demande de déblocage complet en cours de traitement';
+          const _fullPendIcon = document.createElement('i'); _fullPendIcon.className = 'fas fa-unlock mr-2'; btn.appendChild(_fullPendIcon);
+          btn.appendChild(document.createTextNode(_t('btn_full_pending')));
           buttonsDiv.appendChild(btn);
         } else if (alreadyRequestedSingle) {
-          // Demande de tentative unique en cours
+          // Single attempt request in progress
           const btn = document.createElement("button");
           btn.className = "btn btn-info w-100 py-3";
           btn.style.borderRadius = "12px";
           btn.disabled = true;
-          btn.innerHTML = '<i class="fas fa-plus mr-2"></i>Demande de tentative supplémentaire en cours de traitement';
+          const _singlePendIcon = document.createElement('i'); _singlePendIcon.className = 'fas fa-plus mr-2'; btn.appendChild(_singlePendIcon);
+          btn.appendChild(document.createTextNode(_t('btn_single_pending')));
           buttonsDiv.appendChild(btn);
         } else {
-          // Aucune demande, afficher les options disponibles
+          // No pending request — show available action buttons
           const row1 = document.createElement("div");
           row1.className = "row";
           
-          // Bouton déblocage complet
+          // Full unblock button
           const col1 = document.createElement("div");
           col1.className = config.single_attempt_enabled ? "col-6" : "col-12";
           const fullBtn = document.createElement("button");
           fullBtn.className = "btn btn-primary w-100 py-3";
           fullBtn.style.borderRadius = "12px";
-          fullBtn.innerHTML = '<i class="fas fa-unlock mr-2"></i>Déblocage complet';
+          const _fullIcon = document.createElement('i'); _fullIcon.className = 'fas fa-unlock mr-2'; fullBtn.appendChild(_fullIcon); fullBtn.appendChild(document.createTextNode(_t('btn_full_unblock')));
           col1.appendChild(fullBtn);
           row1.appendChild(col1);
           
-          // Bouton tentative unique (seulement si activé)
+          // Single attempt button (only shown when the feature is enabled)
           if (config.single_attempt_enabled) {
             const col2 = document.createElement("div");
             col2.className = "col-6";
             const singleBtn = document.createElement("button");
             singleBtn.className = "btn btn-success w-100 py-3";
             singleBtn.style.borderRadius = "12px";
-            singleBtn.innerHTML = '<i class="fas fa-plus mr-2"></i> Recupérer 1 tentative';
+            const _singleIcon = document.createElement('i'); _singleIcon.className = 'fas fa-plus mr-2'; singleBtn.appendChild(_singleIcon); singleBtn.appendChild(document.createTextNode(_t('btn_single_attempt')));
             col2.appendChild(singleBtn);
             row1.appendChild(col2);
             
-            // Event listener pour tentative unique
+            // Event listener for single attempt request
             singleBtn.addEventListener("click", async () => {
               singleBtn.disabled = true;
-              singleBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Envoi...';
-              
+              setBtnState(singleBtn, 'fas fa-spinner fa-spin mr-2', 'sending');
               try {
-                const data = await secureFetchJson("/api/v1/attempts_remover/request_single_attempt", {
+                const res = await CTFd.fetch("/api/v1/attempts_remover/request_single_attempt", {
                   method: "POST",
-                  headers: {
-                    "Content-Type": "application/json",
-                    "CSRF-Token": csrfToken
-                  },
+                  credentials: "same-origin",
+                  headers: { "Content-Type": "application/json" },
                   body: JSON.stringify({ challenge_id: chal.challenge_id })
                 });
-
+                const data = await res.json();
                 if (data?.success) {
-                singleBtn.innerHTML = '<i class="fas fa-check mr-2"></i>Demande envoyée ! Actualisation...';
-                // Recharger la page après 1 seconde pour voir le nouveau statut
-                setTimeout(() => {
-                  window.location.reload();
-                }, 1000);
-              } else {
+                  setBtnState(singleBtn, 'fas fa-check mr-2', 'request_sent');
+                  setTimeout(() => window.location.reload(), 1000);
+                } else {
                   singleBtn.className = "btn btn-danger w-100 py-3";
-                  singleBtn.innerHTML = '<i class="fas fa-exclamation-triangle mr-2"></i>Erreur';
+                  setBtnState(singleBtn, 'fas fa-exclamation-triangle mr-2', 'error');
                   singleBtn.disabled = false;
                 }
               } catch (e) {
                 console.error(e);
                 singleBtn.className = "btn btn-danger w-100 py-3";
-                singleBtn.innerHTML = '<i class="fas fa-wifi mr-2"></i>Erreur réseau';
+                setBtnState(singleBtn, 'fas fa-wifi mr-2', 'network_error');
                 singleBtn.disabled = false;
               }
             });
@@ -755,36 +796,30 @@ const span = createTextElement('span', configText, 'ml-2 custom-text-muted');
           
           buttonsDiv.appendChild(row1);
           
-          // Event listener pour déblocage complet
+          // Event listener for full unblock request
           fullBtn.addEventListener("click", async () => {
             fullBtn.disabled = true;
-            fullBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Envoi...';
-            
+            setBtnState(fullBtn, 'fas fa-spinner fa-spin mr-2', 'sending');
             try {
-              const data = await secureFetchJson("/api/v1/attempts_remover/request_support", {
+              const res = await CTFd.fetch("/api/v1/attempts_remover/request_support", {
                 method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                  "CSRF-Token": csrfToken
-                },
+                credentials: "same-origin",
+                headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ challenge_id: chal.challenge_id })
               });
-
+              const data = await res.json();
               if (data?.success) {
-                fullBtn.innerHTML = '<i class="fas fa-check mr-2"></i>Demande envoyée ! Actualisation...';
-                // Recharger la page après 1 seconde pour voir le nouveau statut
-                setTimeout(() => {
-                  window.location.reload();
-                }, 1000);
+                setBtnState(fullBtn, 'fas fa-check mr-2', 'request_sent');
+                setTimeout(() => window.location.reload(), 1000);
               } else {
                 fullBtn.className = "btn btn-danger w-100 py-3";
-                fullBtn.innerHTML = '<i class="fas fa-exclamation-triangle mr-2"></i>Erreur';
+                setBtnState(fullBtn, 'fas fa-exclamation-triangle mr-2', 'error');
                 fullBtn.disabled = false;
               }
             } catch (e) {
               console.error(e);
               fullBtn.className = "btn btn-danger w-100 py-3";
-              fullBtn.innerHTML = '<i class="fas fa-wifi mr-2"></i>Erreur réseau';
+              setBtnState(fullBtn, 'fas fa-wifi mr-2', 'network_error');
               fullBtn.disabled = false;
             }
           });
@@ -800,47 +835,59 @@ const span = createTextElement('span', configText, 'ml-2 custom-text-muted');
 
   } catch (e) {
     console.error(e);
-    container.innerHTML = `
-      <div class="text-center py-5">
-        <i class="fas fa-exclamation-triangle text-danger fa-3x mb-3"></i>
-        <h4 class="text-danger">Erreur de chargement</h4>
-        <p class="custom-text-muted">Impossible de charger les données. Veuillez réessayer.</p>
-        <button class="btn custom-btn-outline" onclick="location.reload();">
-          <i class="fas fa-sync-alt mr-2"></i>Réessayer
-        </button>
-      </div>
-    `;
+    container.textContent = '';
+    const errDiv = document.createElement('div');
+    errDiv.className = 'text-center py-5';
+    const errIcon = document.createElement('i');
+    errIcon.className = 'fas fa-exclamation-triangle text-danger fa-3x mb-3';
+    const errTitle = document.createElement('h4');
+    errTitle.className = 'text-danger';
+    errTitle.textContent = _t('loading_error');
+    const errMsg = document.createElement('p');
+    errMsg.className = 'custom-text-muted';
+    errMsg.textContent = _t('error_load_data');
+    const retryBtn = document.createElement('button');
+    retryBtn.className = 'btn custom-btn-outline';
+    retryBtn.onclick = () => location.reload();
+    const retryIcon = document.createElement('i'); retryIcon.className = 'fas fa-sync-alt mr-2';
+    retryBtn.appendChild(retryIcon);
+    retryBtn.appendChild(document.createTextNode(_t('retry')));
+    errDiv.appendChild(errIcon);
+    errDiv.appendChild(errTitle);
+    errDiv.appendChild(errMsg);
+    errDiv.appendChild(retryBtn);
+    container.appendChild(errDiv);
   }
 });
 
-// Fonction pour charger l'historique
+// Load and render the team's unblock history
 async function loadHistory() {
   const historyContainer = document.getElementById("history-section");
   const pagination = document.getElementById("pagination");
   
-  historyContainer.innerHTML = `
-    <div class="text-center py-4">
-      <div class="spinner-border spinner-border-sm custom-text-primary mb-2" role="status"></div>
-      <p class="custom-text-muted mb-0">Chargement...</p>
-    </div>
-  `;
+  historyContainer.textContent = '';
+  const _loadDiv = document.createElement('div'); _loadDiv.className = 'text-center py-4';
+  const _spinner = document.createElement('div'); _spinner.className = 'spinner-border spinner-border-sm custom-text-primary mb-2'; _spinner.setAttribute('role', 'status');
+  const _loadTxt = document.createElement('p'); _loadTxt.className = 'custom-text-muted mb-0'; _loadTxt.textContent = _t('loading');
+  _loadDiv.appendChild(_spinner); _loadDiv.appendChild(_loadTxt);
+  historyContainer.appendChild(_loadDiv);
 
   try {
-    const response = await fetch("/api/v1/attempts_remover/my_history", { credentials: "same-origin" });
+    const response = await CTFd.fetch("/api/v1/attempts_remover/my_history", { credentials: "same-origin" });
     const history = await response.json();
 
     if (!history || history.length === 0) {
-      historyContainer.innerHTML = `
-        <div class="text-center py-4">
-          <i class="fas fa-info-circle custom-text-muted fa-2x mb-2"></i>
-          <p class="custom-text-muted mb-0">Aucune demande traitée pour le moment</p>
-        </div>
-      `;
+      historyContainer.textContent = '';
+      const _emptyDiv = document.createElement('div'); _emptyDiv.className = 'text-center py-4';
+      const _emptyIcon = document.createElement('i'); _emptyIcon.className = 'fas fa-info-circle custom-text-muted fa-2x mb-2';
+      const _emptyTxt = document.createElement('p'); _emptyTxt.className = 'custom-text-muted mb-0'; _emptyTxt.textContent = _t('history_empty');
+      _emptyDiv.appendChild(_emptyIcon); _emptyDiv.appendChild(_emptyTxt);
+      historyContainer.appendChild(_emptyDiv);
       pagination.style.display = "none";
       return;
     }
 
-    const itemsPerPage = 10;
+    const itemsPerPage = 5;
     let currentPage = 1;
     const totalPages = Math.ceil(history.length / itemsPerPage);
 
@@ -855,14 +902,12 @@ async function loadHistory() {
       tableWrapper.className = 'table-responsive';
       
       const table = document.createElement("table");
-      table.className = "table table-hover";
-      table.style.borderRadius = '15px';
-      table.style.overflow = 'hidden';
+      table.className = "table table-hover history-table";
 
       const thead = document.createElement("thead");
       const headerRow = document.createElement("tr");
       
-      const headers = ["Challenge", "Traité par", "Type", "Coût", "Date de traitement"];
+      const headers = [_t('history_col_challenge'), _t('history_col_processed_by'), _t('history_col_type'), _t('history_col_cost'), _t('history_col_processed_on')];
       headers.forEach(text => {
         const th = document.createElement("th");
         th.textContent = text;
@@ -909,14 +954,14 @@ async function loadHistory() {
         const typeIcon = document.createElement('i');
         typeIcon.className = log.type === 'full' ? 'fas fa-unlock custom-text-danger mr-3' : 'fas fa-plus custom-text-success mr-3';
         const typeText = document.createElement('span');
-        typeText.textContent = log.type === 'full' ? 'Déblocage complet' : 'Tentative unique';
+        typeText.textContent = log.type === 'full' ? _t('type_full_unblock') : _t('type_single_attempt');
         typeText.className = 'custom-text-primary';
         typeDiv.appendChild(typeIcon);
         typeDiv.appendChild(typeText);
         tdType.appendChild(typeDiv);
         tr.appendChild(tdType);
 
-        // Coût
+        // Penalty cost
         const tdCost = document.createElement("td");
         const costDiv = document.createElement('div');
         costDiv.className = 'd-flex align-items-center';
@@ -937,8 +982,7 @@ async function loadHistory() {
         calIcon.className = 'fas fa-calendar-alt mr-3';
         const dateText = document.createElement('span');
         const date = new Date(log.timestamp);
-        date.setHours(date.getHours() + 2); // Ajouter 2 heures artificiellement
-        dateText.textContent = date.toLocaleString('fr-FR');
+        dateText.textContent = date.toLocaleString();
         dateDiv.appendChild(calIcon);
         dateDiv.appendChild(dateText);
         tdDate.appendChild(dateDiv);
@@ -953,7 +997,9 @@ async function loadHistory() {
     }
 
     function renderPagination() {
-      pagination.innerHTML = "";
+      while (pagination.firstChild) pagination.removeChild(pagination.firstChild);
+      if (totalPages <= 1) { pagination.style.display = "none"; return; }
+      pagination.style.display = "";
       for (let i = 1; i <= totalPages; i++) {
         const li = document.createElement("li");
         li.className = "page-item" + (i === currentPage ? " active" : "");
@@ -973,15 +1019,10 @@ async function loadHistory() {
     }
 
     renderPage(currentPage);
-    if (totalPages > 1) renderPagination();
+    renderPagination();
 
-    renderPage(currentPage);
-    if (totalPages > 1) renderPagination();
-
-    // Calculer le total des coûts
+    // Compute and display the cumulative penalty cost
     const totalCost = history.reduce((sum, log) => sum + (log.cost || 0), 0);
-    
-    // Ajouter la ligne de total
     if (totalCost > 0) {
       const totalDiv = document.createElement('div');
       totalDiv.className = 'custom-alert-info p-3 mt-3 text-center';
@@ -993,24 +1034,24 @@ async function loadHistory() {
       
       const totalText = document.createElement('span');
       // totalText.className = 'font-weight-bold custom-text-primary';
-      totalText.textContent = `Au total, vos déblocages vous ont coûtés ${totalCost} points !`;
+      totalText.textContent = _t('total_cost', { total: totalCost });
       
       // totalDiv.appendChild(totalIcon);
       totalDiv.appendChild(totalText);
       
-      // Insérer avant la pagination
+      // Insert the total row above the pagination controls
       const paginationParent = pagination.parentNode;
       paginationParent.insertBefore(totalDiv, pagination);
     }
 
   } catch (e) {
     console.error(e);
-    historyContainer.innerHTML = `
-      <div class="text-center py-4">
-        <i class="fas fa-exclamation-triangle text-danger fa-2x mb-2"></i>
-        <p class="text-danger mb-0">Erreur lors du chargement de l'historique</p>
-      </div>
-    `;
+    historyContainer.textContent = '';
+    const _errDiv = document.createElement('div'); _errDiv.className = 'text-center py-4';
+    const _errIcon = document.createElement('i'); _errIcon.className = 'fas fa-exclamation-triangle text-danger fa-2x mb-2';
+    const _errTxt = document.createElement('p'); _errTxt.className = 'text-danger mb-0'; _errTxt.textContent = _t('history_load_error');
+    _errDiv.appendChild(_errIcon); _errDiv.appendChild(_errTxt);
+    historyContainer.appendChild(_errDiv);
   }
 }
 </script>
